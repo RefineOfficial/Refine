@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<!-- CSP aplicavel via <meta>. As diretivas que so funcionam em header HTTP
+     (frame-ancestors, HSTS, X-Content-Type-Options) estao em nginx.conf / _headers. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-src 'none'; manifest-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Refine</title>
+<meta name="description" content="A community for appearance-focused self-improvement that's grounded, healthy and actually sustainable. Guides, routines, discussion and habit tracking.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'><rect%20width='32'%20height='32'%20rx='7'%20fill='%230A0A0C'/><circle%20cx='16'%20cy='16'%20r='12.4'%20fill='none'%20stroke='%23D2A45E'%20stroke-width='1.7'%20opacity='.5'/><path%20d='M9%2020.6C12%2020.6%2014.3%2018.4%2016.1%2015.4C17.9%2012.4%2019.6%2010.4%2022.2%2010.4'%20fill='none'%20stroke='%23D2A45E'%20stroke-width='2.6'%20stroke-linecap='round'/><circle%20cx='22.4'%20cy='10.4'%20r='3.1'%20fill='%23D2A45E'/></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'><rect%20width='32'%20height='32'%20rx='7'%20fill='%230A0A0C'/><circle%20cx='16'%20cy='16'%20r='12.4'%20fill='none'%20stroke='%23D2A45E'%20stroke-width='1.7'%20opacity='.5'/><path%20d='M9%2020.6C12%2020.6%2014.3%2018.4%2016.1%2015.4C17.9%2012.4%2019.6%2010.4%2022.2%2010.4'%20fill='none'%20stroke='%23D2A45E'%20stroke-width='2.6'%20stroke-linecap='round'/><circle%20cx='22.4'%20cy='10.4'%20r='3.1'%20fill='%23D2A45E'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   REFINE — design tokens
+   ============================================================ */
+:root{
+  --bg:#0A0A0C;
+  --bg-lift:#0E0E11;
+  --surf:#131317;
+  --surf-2:#191920;
+  --surf-3:#20202a;
+  --line:rgba(255,255,255,.075);
+  --line-str:rgba(255,255,255,.14);
+
+  --tx:#F3F1ED;
+  --tx-2:#A3A1AC;
+  --tx-3:#6B6975;
+
+  --bronze:#D2A45E;
+  --bronze-dim:#A8814A;
+  --bronze-wash:rgba(210,164,94,.10);
+  --bronze-line:rgba(210,164,94,.32);
+
+  --jade:#7FB09A;
+  --jade-wash:rgba(127,176,154,.10);
+  --clay:#DC7F6E;
+  --clay-wash:rgba(220,127,110,.10);
+  --violet:#9A8FC4;
+
+  --r-s:10px; --r-m:16px; --r-l:24px; --r-xl:34px;
+  --shadow:0 24px 60px -24px rgba(0,0,0,.85);
+  --shadow-soft:0 12px 32px -18px rgba(0,0,0,.7);
+
+  --ease:cubic-bezier(.22,.68,.32,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --nav-h:66px;
+
+  --serif:"Fraunces","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --wrap:1180px;
+}
+/* The product is dark by design; keep it dark whatever the viewer's setting,
+   but declare the tokens in all three places so nothing inherits. */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark; } }
+:root[data-theme="dark"]{ color-scheme:dark; }
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--bg); color:var(--tx);
+  font-family:var(--sans); font-size:16px; line-height:1.6;
+  font-weight:400; letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+img{ max-width:100%; display:block; }
+button,input,textarea,select{ font:inherit; color:inherit; }
+a{ color:inherit; text-decoration:none; }
+::selection{ background:rgba(210,164,94,.3); color:#fff; }
+
+:focus-visible{ outline:2px solid var(--bronze); outline-offset:3px; border-radius:4px; }
+
+/* scrollbars */
+*::-webkit-scrollbar{ width:10px; height:10px; }
+*::-webkit-scrollbar-track{ background:transparent; }
+*::-webkit-scrollbar-thumb{ background:#26262f; border-radius:20px; border:3px solid var(--bg); }
+*::-webkit-scrollbar-thumb:hover{ background:#34343f; }
+
+/* ============================================================
+   type scale
+   ============================================================ */
+h1,h2,h3,h4{ font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.08; margin:0;
+  font-variation-settings:"SOFT" 12,"WONK" 1; }
+.d1{ font-size:clamp(2.7rem,7.4vw,5.4rem); line-height:1.02; letter-spacing:-.035em; font-weight:300; }
+.d2{ font-size:clamp(2rem,4.2vw,3.15rem); letter-spacing:-.03em; font-weight:300; }
+.d3{ font-size:clamp(1.45rem,2.6vw,2rem); letter-spacing:-.025em; }
+.d4{ font-size:1.22rem; letter-spacing:-.02em; }
+p{ margin:0; }
+.lede{ font-size:clamp(1.02rem,1.5vw,1.16rem); color:var(--tx-2); line-height:1.66; max-width:62ch; }
+.body-s{ font-size:.925rem; color:var(--tx-2); line-height:1.62; }
+.micro{ font-size:.78rem; color:var(--tx-3); letter-spacing:.01em; }
+em.wonk{ font-style:italic; font-variation-settings:"SOFT" 40,"WONK" 1; color:var(--bronze); }
+
+/* ============================================================
+   layout primitives
+   ============================================================ */
+.wrap{ width:min(var(--wrap),100% - 2.6rem); margin-inline:auto; }
+@media(max-width:640px){ .wrap{ width:min(var(--wrap),100% - 1.8rem); } }
+.stack-s>*+*{ margin-top:.55rem; }
+.stack-m>*+*{ margin-top:1rem; }
+.section{ padding-block:clamp(4rem,8.5vw,7rem); position:relative; }
+.section-tight{ padding-block:clamp(2.6rem,5vw,4rem); }
+.rule{ height:1px; background:var(--line); border:0; margin:0; }
+
+.head-block{ max-width:64ch; margin-bottom:2.6rem; }
+.head-block .kicker{
+  display:inline-flex; align-items:center; gap:.5rem; font-size:.8rem; color:var(--bronze);
+  margin-bottom:.9rem; font-weight:500;
+}
+.head-block .kicker::before{ content:""; width:22px; height:1px; background:var(--bronze-line); }
+.head-block p{ margin-top:.95rem; }
+
+/* ============================================================
+   nav
+   ============================================================ */
+.nav{
+  position:sticky; top:0; z-index:200; height:var(--nav-h);
+  display:flex; align-items:center;
+  background:rgba(10,10,12,.72); backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid transparent; transition:border-color .3s, background .3s;
+}
+.nav.is-stuck{ border-bottom-color:var(--line); background:rgba(10,10,12,.88); }
+.nav-in{ display:flex; align-items:center; gap:1.4rem; width:min(var(--wrap),100% - 2.6rem); margin-inline:auto; }
+@media(max-width:640px){ .nav-in{ width:min(var(--wrap),100% - 1.8rem); } }
+.brand{ display:flex; align-items:center; gap:.6rem; margin-right:auto; flex-shrink:0; }
+.brand svg{ width:26px; height:26px; }
+.brand b{ font-family:var(--serif); font-weight:500; font-size:1.16rem; letter-spacing:-.02em; }
+.brand span{ color:var(--bronze); }
+
+.nav-links{ display:flex; align-items:center; gap:.15rem; }
+.nav-links a{
+  padding:.45rem .72rem; border-radius:99px; font-size:.895rem; color:var(--tx-2);
+  font-weight:450; transition:color .18s, background .18s; position:relative;
+}
+.nav-links a:hover{ color:var(--tx); background:rgba(255,255,255,.045); }
+.nav-links a.active{ color:var(--tx); }
+.nav-links a.active::after{
+  content:""; position:absolute; left:50%; translate:-50% 0; bottom:1px;
+  width:15px; height:2px; border-radius:2px; background:var(--bronze);
+}
+.nav-cta{ display:flex; align-items:center; gap:.5rem; }
+.burger{
+  display:none; width:40px; height:40px; align-items:center; justify-content:center;
+  background:transparent; border:1px solid var(--line); border-radius:11px; cursor:pointer;
+}
+.burger svg{ width:17px; height:17px; }
+@media(max-width:1020px){
+  .nav-links{ display:none; }
+  .burger{ display:flex; }
+  .nav-cta .btn{ display:none; }
+}
+
+/* mobile sheet */
+.sheet{
+  position:fixed; inset:0; z-index:300; background:rgba(8,8,10,.97);
+  backdrop-filter:blur(20px); display:flex; flex-direction:column; padding:1.1rem;
+  opacity:0; visibility:hidden; transition:opacity .3s var(--ease), visibility .3s;
+}
+.sheet.open{ opacity:1; visibility:visible; }
+.sheet-top{ display:flex; justify-content:space-between; align-items:center; height:44px; }
+.sheet nav{ margin-top:1.6rem; display:flex; flex-direction:column; }
+.sheet nav a{
+  font-family:var(--serif); font-size:1.85rem; font-weight:300; letter-spacing:-.025em;
+  padding:.62rem 0; border-bottom:1px solid var(--line); color:var(--tx-2);
+  opacity:0; transform:translateY(12px);
+}
+.sheet.open nav a{ animation:sheetIn .5s var(--ease-out) forwards; }
+.sheet nav a.active{ color:var(--tx); }
+.sheet nav a i{ font-style:normal; font-family:var(--sans); font-size:.72rem; color:var(--tx-3); margin-left:.6rem; vertical-align:middle; }
+@keyframes sheetIn{ to{ opacity:1; transform:none; } }
+.sheet-foot{ margin-top:auto; padding-top:1.4rem; }
+
+/* ============================================================
+   buttons
+   ============================================================ */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  padding:.7rem 1.15rem; border-radius:99px; border:1px solid transparent;
+  font-size:.9rem; font-weight:500; cursor:pointer; white-space:nowrap;
+  transition:transform .22s var(--ease), background .22s, border-color .22s, color .22s, box-shadow .22s;
+  background:transparent;
+}
+.btn:active{ transform:scale(.97); }
+.btn-p{ background:var(--bronze); color:#17130B; font-weight:600; }
+.btn-p:hover{ background:#E2B571; box-shadow:0 8px 26px -10px rgba(210,164,94,.6); }
+.btn-g{ border-color:var(--line-str); color:var(--tx); }
+.btn-g:hover{ border-color:var(--bronze-line); background:var(--bronze-wash); color:var(--bronze); }
+.btn-q{ color:var(--tx-2); padding-inline:.85rem; }
+.btn-q:hover{ color:var(--tx); background:rgba(255,255,255,.05); }
+.btn-sm{ padding:.44rem .8rem; font-size:.825rem; }
+.btn-full{ width:100%; }
+.btn-icn{ width:38px; height:38px; padding:0; border-radius:11px; border-color:var(--line); }
+.btn-icn:hover{ border-color:var(--line-str); background:rgba(255,255,255,.04); }
+.btn svg{ width:15px; height:15px; flex-shrink:0; }
+
+/* ============================================================
+   views
+   ============================================================ */
+.view{ display:none; }
+.view.active{ display:block; animation:viewIn .5s var(--ease-out); }
+@keyframes viewIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+
+[data-reveal]{ opacity:0; transform:translateY(18px); }
+[data-reveal].in{ opacity:1; transform:none; transition:opacity .7s var(--ease-out), transform .7s var(--ease-out); }
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+  [data-reveal]{ opacity:1; transform:none; }
+  html{ scroll-behavior:auto; }
+}
+
+/* ============================================================
+   hero
+   ============================================================ */
+.hero{ position:relative; padding-top:clamp(3rem,6vw,5rem); padding-bottom:clamp(3rem,6vw,4.5rem); overflow:hidden; }
+.hero-glow{ position:absolute; inset:-30% -10% auto -10%; height:820px; pointer-events:none; z-index:0; }
+.hero-glow i{
+  position:absolute; border-radius:50%; filter:blur(110px); opacity:.5;
+  animation:drift 26s ease-in-out infinite alternate;
+}
+.hero-glow i:nth-child(1){ width:640px; height:520px; left:2%; top:14%; background:rgba(210,164,94,.19); }
+.hero-glow i:nth-child(2){ width:520px; height:460px; right:6%; top:2%; background:rgba(127,176,154,.13); animation-delay:-8s; }
+.hero-glow i:nth-child(3){ width:420px; height:400px; left:46%; top:34%; background:rgba(154,143,196,.12); animation-delay:-15s; }
+@keyframes drift{ from{ transform:translate3d(0,0,0) scale(1); } to{ transform:translate3d(40px,-30px,0) scale(1.14); } }
+
+.hero-grid{ position:relative; z-index:1; display:grid; grid-template-columns:1.06fr .94fr; gap:clamp(2rem,4vw,3.6rem); align-items:center; }
+@media(max-width:940px){ .hero-grid{ grid-template-columns:1fr; } }
+
+.hero-tag{
+  display:inline-flex; align-items:center; gap:.55rem; padding:.34rem .34rem .34rem .8rem;
+  border:1px solid var(--line); border-radius:99px; font-size:.8rem; color:var(--tx-2); margin-bottom:1.5rem;
+  background:rgba(255,255,255,.02);
+}
+.hero-tag b{ background:var(--bronze-wash); color:var(--bronze); font-weight:500; padding:.16rem .55rem; border-radius:99px; font-size:.74rem; }
+.hero h1{ margin-bottom:1.3rem; }
+.hero .lede{ max-width:52ch; }
+.hero-actions{ display:flex; gap:.7rem; margin-top:2rem; flex-wrap:wrap; }
+.hero-proof{ display:flex; gap:2.1rem; margin-top:2.6rem; flex-wrap:wrap; }
+.hero-proof div b{ display:block; font-family:var(--serif); font-size:1.72rem; font-weight:400; letter-spacing:-.02em; }
+.hero-proof div span{ font-size:.8rem; color:var(--tx-3); }
+
+/* hero panel — live consistency grid */
+.panel{
+  background:linear-gradient(170deg,var(--surf-2),var(--surf)); border:1px solid var(--line);
+  border-radius:var(--r-xl); padding:1.5rem; box-shadow:var(--shadow); position:relative; overflow:hidden;
+}
+.panel::after{
+  content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(150deg,rgba(255,255,255,.07),transparent 42%);
+}
+.panel-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.15rem; }
+.panel-top h3{ font-size:1.12rem; }
+.panel-top p{ font-size:.8rem; color:var(--tx-3); margin-top:.18rem; }
+.ring{ position:relative; width:52px; height:52px; flex-shrink:0; }
+.ring svg{ width:52px; height:52px; transform:rotate(-90deg); }
+.ring circle{ fill:none; stroke-width:4; }
+.ring .bg{ stroke:rgba(255,255,255,.08); }
+.ring .fg{ stroke:var(--bronze); stroke-linecap:round; transition:stroke-dashoffset .8s var(--ease-out); }
+.ring b{ position:absolute; inset:0; display:grid; place-items:center; font-size:.78rem; font-weight:600; }
+
+.habit-row{
+  display:flex; align-items:center; gap:.75rem; padding:.62rem .7rem; border-radius:13px;
+  transition:background .2s; cursor:pointer; user-select:none; border:1px solid transparent;
+}
+.habit-row:hover{ background:rgba(255,255,255,.035); }
+.habit-row.done .habit-name{ color:var(--tx-3); text-decoration:line-through; text-decoration-color:var(--tx-3); }
+.tick{
+  width:21px; height:21px; border-radius:7px; border:1.5px solid var(--line-str); flex-shrink:0;
+  display:grid; place-items:center; transition:all .24s var(--ease); background:transparent;
+}
+.tick svg{ width:11px; height:11px; stroke:#17130B; stroke-width:3.2; opacity:0; transform:scale(.4); transition:all .24s var(--ease); }
+.habit-row.done .tick{ background:var(--bronze); border-color:var(--bronze); }
+.habit-row.done .tick svg{ opacity:1; transform:none; }
+.habit-name{ font-size:.925rem; flex:1; transition:color .2s; }
+.habit-streak{ font-size:.74rem; color:var(--tx-3); display:flex; align-items:center; gap:.25rem; }
+.habit-streak svg{ width:11px; height:11px; }
+.habit-streak.hot{ color:var(--bronze); }
+
+.panel-foot{ margin-top:1.1rem; padding-top:1.1rem; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.week{ display:flex; gap:5px; }
+.week i{ width:19px; height:19px; border-radius:6px; background:rgba(255,255,255,.055); display:grid; place-items:center; font-size:.58rem; color:var(--tx-3); font-style:normal; }
+.week i.f1{ background:rgba(210,164,94,.25); } .week i.f2{ background:rgba(210,164,94,.55); }
+.week i.f3{ background:var(--bronze); color:#17130B; font-weight:600; }
+.week i.today{ box-shadow:0 0 0 1.5px var(--bg),0 0 0 3px var(--bronze-line); }
+
+/* marquee */
+.ticker{ border-block:1px solid var(--line); padding:.85rem 0; overflow:hidden; background:var(--bg-lift); }
+.ticker-track{ display:flex; gap:2.6rem; width:max-content; animation:slide 44s linear infinite; }
+.ticker:hover .ticker-track{ animation-play-state:paused; }
+@keyframes slide{ to{ transform:translateX(-50%); } }
+.ticker span{ display:flex; align-items:center; gap:2.6rem; font-size:.855rem; color:var(--tx-3); white-space:nowrap; }
+.ticker span::after{ content:""; width:4px; height:4px; border-radius:50%; background:var(--bronze-dim); opacity:.6; }
+
+/* ============================================================
+   cards
+   ============================================================ */
+.grid{ display:grid; gap:1.1rem; }
+.g-2{ grid-template-columns:repeat(2,1fr); }
+.g-3{ grid-template-columns:repeat(3,1fr); }
+.g-4{ grid-template-columns:repeat(4,1fr); }
+@media(max-width:980px){ .g-3,.g-4{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:660px){ .g-2,.g-3,.g-4{ grid-template-columns:1fr; } }
+
+.card{
+  background:var(--surf); border:1px solid var(--line); border-radius:var(--r-l);
+  padding:1.45rem; position:relative; overflow:hidden;
+  transition:border-color .3s var(--ease), transform .3s var(--ease), background .3s;
+}
+.card-i{ cursor:pointer; }
+.card-i::before{
+  content:""; position:absolute; width:280px; height:280px; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle,rgba(210,164,94,.13),transparent 66%);
+  left:var(--mx,50%); top:var(--my,50%); translate:-50% -50%;
+  opacity:0; transition:opacity .35s; z-index:0;
+}
+.card-i:hover::before{ opacity:1; }
+.card-i:hover{ border-color:var(--line-str); transform:translateY(-3px); }
+.card>*{ position:relative; z-index:1; }
+.card h3{ font-size:1.14rem; margin-bottom:.45rem; }
+
+.c-icon{
+  width:38px; height:38px; border-radius:12px; display:grid; place-items:center; margin-bottom:1rem;
+  background:var(--bronze-wash); border:1px solid var(--bronze-line); color:var(--bronze);
+}
+.c-icon svg{ width:18px; height:18px; }
+.c-icon.jade{ background:var(--jade-wash); border-color:rgba(127,176,154,.3); color:var(--jade); }
+.c-icon.violet{ background:rgba(154,143,196,.1); border-color:rgba(154,143,196,.3); color:var(--violet); }
+.c-icon.clay{ background:var(--clay-wash); border-color:rgba(220,127,110,.3); color:var(--clay); }
+
+.tag{
+  display:inline-flex; align-items:center; gap:.34rem; font-size:.735rem; padding:.2rem .58rem;
+  border-radius:99px; border:1px solid var(--line); color:var(--tx-2); background:rgba(255,255,255,.025);
+}
+.tag.b{ color:var(--bronze); border-color:var(--bronze-line); background:var(--bronze-wash); }
+.tag.j{ color:var(--jade); border-color:rgba(127,176,154,.3); background:var(--jade-wash); }
+.tag.c{ color:var(--clay); border-color:rgba(220,127,110,.3); background:var(--clay-wash); }
+.tag.v{ color:var(--violet); border-color:rgba(154,143,196,.3); background:rgba(154,143,196,.1); }
+.tag-row{ display:flex; gap:.4rem; flex-wrap:wrap; }
+
+.meta{ display:flex; gap:.9rem; font-size:.78rem; color:var(--tx-3); flex-wrap:wrap; }
+.meta i{ font-style:normal; display:inline-flex; align-items:center; gap:.3rem; }
+.meta svg{ width:12px; height:12px; }
+
+/* pillar cards — the five fundamentals */
+.pillars{ display:grid; grid-template-columns:repeat(5,1fr); gap:0; border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden; background:var(--surf); }
+.pillars>div{ padding:1.5rem 1.35rem; border-right:1px solid var(--line); transition:background .3s; position:relative; }
+.pillars>div:last-child{ border-right:0; }
+.pillars>div:hover{ background:var(--surf-2); }
+.pillars b{ font-family:var(--serif); font-size:1.05rem; font-weight:500; display:block; margin-bottom:.35rem; }
+.pillars .n{ font-size:.72rem; color:var(--bronze); display:block; margin-bottom:.9rem; font-variant-numeric:tabular-nums; }
+@media(max-width:980px){
+  .pillars{ grid-template-columns:repeat(2,1fr); }
+  .pillars>div{ border-bottom:1px solid var(--line); }
+  .pillars>div:nth-child(2n){ border-right:0; }
+}
+@media(max-width:520px){ .pillars{ grid-template-columns:1fr; } .pillars>div{ border-right:0; } }
+
+/* filters */
+.filters{ display:flex; gap:.45rem; flex-wrap:wrap; margin-bottom:1.7rem; }
+.chip{
+  padding:.42rem .82rem; border-radius:99px; border:1px solid var(--line); background:transparent;
+  font-size:.845rem; color:var(--tx-2); cursor:pointer; transition:all .2s var(--ease);
+}
+.chip:hover{ border-color:var(--line-str); color:var(--tx); }
+.chip.on{ background:var(--tx); color:var(--bg); border-color:var(--tx); font-weight:500; }
+
+.search{
+  display:flex; align-items:center; gap:.6rem; padding:.62rem .95rem; border:1px solid var(--line);
+  border-radius:99px; background:var(--surf); transition:border-color .2s; max-width:340px; width:100%;
+}
+.search:focus-within{ border-color:var(--bronze-line); }
+.search svg{ width:15px; height:15px; color:var(--tx-3); flex-shrink:0; }
+.search input{ border:0; background:transparent; outline:none; width:100%; font-size:.9rem; }
+.search input::placeholder{ color:var(--tx-3); }
+
+/* ============================================================
+   guide detail modal
+   ============================================================ */
+.modal-bg{
+  position:fixed; inset:0; z-index:400; background:rgba(5,5,7,.78); backdrop-filter:blur(7px);
+  opacity:0; visibility:hidden; transition:opacity .34s var(--ease), visibility .34s;
+  display:flex; align-items:flex-end; justify-content:center;
+}
+.modal-bg.open{ opacity:1; visibility:visible; }
+@media(min-width:760px){ .modal-bg{ align-items:center; padding:2rem; } }
+.modal{
+  background:var(--bg-lift); border:1px solid var(--line-str); width:min(720px,100%);
+  max-height:min(88vh,860px); overflow-y:auto; border-radius:var(--r-xl) var(--r-xl) 0 0;
+  transform:translateY(40px); transition:transform .42s var(--ease-out); position:relative;
+}
+@media(min-width:760px){ .modal{ border-radius:var(--r-xl); transform:translateY(24px) scale(.98); } }
+.modal-bg.open .modal{ transform:none; }
+.modal-head{
+  position:sticky; top:0; background:rgba(14,14,17,.93); backdrop-filter:blur(14px);
+  padding:1.4rem 1.6rem 1.1rem; border-bottom:1px solid var(--line); z-index:2;
+}
+.modal-head .x{ position:absolute; top:1.25rem; right:1.3rem; }
+.modal-body{ padding:1.6rem; }
+.modal-body h4{ font-size:1.02rem; margin-bottom:.7rem; }
+.modal-body section+section{ margin-top:1.9rem; }
+.grip{ width:36px; height:4px; border-radius:9px; background:var(--line-str); margin:.7rem auto -.3rem; }
+@media(min-width:760px){ .grip{ display:none; } }
+
+.steps{ list-style:none; padding:0; margin:0; counter-reset:s; }
+.steps li{ position:relative; padding-left:2.45rem; padding-bottom:1.15rem; counter-increment:s; }
+.steps li::before{
+  content:counter(s,decimal-leading-zero); position:absolute; left:0; top:0;
+  width:25px; height:25px; border-radius:50%; border:1px solid var(--bronze-line); color:var(--bronze);
+  display:grid; place-items:center; font-size:.68rem; font-family:var(--sans); font-weight:600; background:var(--bg-lift);
+}
+.steps li::after{ content:""; position:absolute; left:12px; top:27px; bottom:2px; width:1px; background:var(--line); }
+.steps li:last-child{ padding-bottom:0; }
+.steps li:last-child::after{ display:none; }
+.steps b{ display:block; font-size:.945rem; font-weight:550; margin-bottom:.18rem; }
+.steps p{ font-size:.885rem; color:var(--tx-2); line-height:1.6; }
+
+.bullets{ list-style:none; padding:0; margin:0; display:grid; gap:.6rem; }
+.bullets li{ display:flex; gap:.65rem; font-size:.895rem; color:var(--tx-2); line-height:1.55; }
+.bullets li::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--bronze-dim); margin-top:.56rem; flex-shrink:0; }
+.bullets.x li::before{ background:var(--clay); }
+.bullets.ok li::before{ background:var(--jade); }
+
+.note{
+  border:1px solid var(--line); border-left:2px solid var(--bronze); border-radius:0 var(--r-m) var(--r-m) 0;
+  padding:1rem 1.15rem; background:rgba(255,255,255,.02); font-size:.885rem; color:var(--tx-2); line-height:1.6;
+}
+.note.jade{ border-left-color:var(--jade); }
+.note.clay{ border-left-color:var(--clay); }
+.note b{ color:var(--tx); font-weight:550; }
+
+/* ============================================================
+   tabs
+   ============================================================ */
+.tabs{ display:flex; gap:.3rem; padding:.3rem; background:var(--surf); border:1px solid var(--line); border-radius:99px; width:fit-content; max-width:100%; overflow-x:auto; }
+.tabs::-webkit-scrollbar{ display:none; }
+.tabs button{
+  padding:.5rem 1.05rem; border-radius:99px; border:0; background:transparent; color:var(--tx-2);
+  font-size:.875rem; cursor:pointer; white-space:nowrap; transition:color .2s, background .25s var(--ease);
+}
+.tabs button:hover{ color:var(--tx); }
+.tabs button.on{ background:var(--surf-3); color:var(--tx); font-weight:500; }
+.tabpane{ display:none; }
+.tabpane.on{ display:block; animation:viewIn .42s var(--ease-out); }
+
+/* routine timeline */
+.routine{ display:grid; gap:.1rem; }
+.rstep{
+  display:grid; grid-template-columns:78px 1fr; gap:1.25rem; padding:1.05rem 0; border-top:1px solid var(--line);
+  align-items:start;
+}
+.rstep:first-child{ border-top:0; }
+.rstep .t{ font-size:.79rem; color:var(--tx-3); padding-top:.16rem; font-variant-numeric:tabular-nums; }
+.rstep b{ font-size:.985rem; font-weight:550; display:block; margin-bottom:.22rem; }
+.rstep p{ font-size:.885rem; color:var(--tx-2); line-height:1.58; }
+.rstep .opt{ font-size:.72rem; color:var(--tx-3); border:1px solid var(--line); padding:.08rem .42rem; border-radius:99px; margin-left:.45rem; vertical-align:middle; }
+@media(max-width:560px){ .rstep{ grid-template-columns:1fr; gap:.3rem; } }
+
+/* ============================================================
+   style / aesthetics
+   ============================================================ */
+.aes{ border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden; background:var(--surf); transition:border-color .3s; }
+.aes:hover{ border-color:var(--line-str); }
+.aes-sw{ height:82px; display:flex; }
+.aes-sw i{ flex:1; transition:flex .4s var(--ease); }
+.aes:hover .aes-sw i:first-child{ flex:2.2; }
+.aes-b{ padding:1.3rem 1.35rem 1.45rem; }
+.aes-b h3{ font-size:1.1rem; margin-bottom:.35rem; }
+.aes-list{ list-style:none; padding:0; margin:.95rem 0 0; display:grid; gap:.42rem; }
+.aes-list li{ font-size:.85rem; color:var(--tx-2); display:flex; gap:.55rem; align-items:baseline; }
+.aes-list li b{ color:var(--tx-3); font-weight:400; font-size:.76rem; min-width:62px; flex-shrink:0; }
+
+.fitcheck{ display:grid; gap:.05rem; }
+.fitcheck label{
+  display:flex; gap:.8rem; align-items:flex-start; padding:.85rem .2rem; border-top:1px solid var(--line);
+  cursor:pointer; transition:opacity .2s;
+}
+.fitcheck label:first-child{ border-top:0; }
+.fitcheck input{ position:absolute; opacity:0; pointer-events:none; }
+.fitcheck .box{ width:19px; height:19px; border-radius:6px; border:1.5px solid var(--line-str); flex-shrink:0; margin-top:.15rem; display:grid; place-items:center; transition:all .22s var(--ease); }
+.fitcheck .box svg{ width:10px; height:10px; stroke:#17130B; stroke-width:3.4; opacity:0; transition:opacity .2s; }
+.fitcheck input:checked+.box{ background:var(--jade); border-color:var(--jade); }
+.fitcheck input:checked+.box svg{ opacity:1; }
+.fitcheck input:checked~.txt{ opacity:.45; }
+.fitcheck .txt b{ display:block; font-size:.92rem; font-weight:500; }
+.fitcheck .txt span{ font-size:.835rem; color:var(--tx-2); }
+.fitcheck input:focus-visible+.box{ outline:2px solid var(--bronze); outline-offset:2px; }
+
+/* ============================================================
+   community
+   ============================================================ */
+.thread{
+  display:grid; grid-template-columns:auto 1fr; gap:1rem; padding:1.25rem 1.35rem;
+  border:1px solid var(--line); border-radius:var(--r-m); background:var(--surf);
+  transition:border-color .25s, background .25s;
+}
+.thread:hover{ border-color:var(--line-str); background:var(--surf-2); }
+.vote{ display:flex; flex-direction:column; align-items:center; gap:.15rem; }
+.vote button{
+  width:30px; height:26px; border-radius:8px; border:1px solid var(--line); background:transparent;
+  cursor:pointer; display:grid; place-items:center; color:var(--tx-3); transition:all .2s var(--ease);
+}
+.vote button:hover{ border-color:var(--bronze-line); color:var(--bronze); }
+.vote button.on{ background:var(--bronze-wash); border-color:var(--bronze-line); color:var(--bronze); }
+.vote button svg{ width:13px; height:13px; }
+.vote b{ font-size:.82rem; font-variant-numeric:tabular-nums; }
+.vote b.on{ color:var(--bronze); }
+.thread h3{ font-size:1.055rem; margin-bottom:.4rem; line-height:1.28; }
+.thread .who{ display:flex; align-items:center; gap:.5rem; margin-bottom:.7rem; font-size:.79rem; color:var(--tx-3); }
+.av{
+  width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-size:.66rem;
+  font-weight:600; color:var(--bg); flex-shrink:0;
+}
+.reply{
+  margin-top:.9rem; padding:.85rem 1rem; border-radius:var(--r-s); background:rgba(255,255,255,.028);
+  border:1px solid var(--line); font-size:.865rem; color:var(--tx-2); line-height:1.58;
+}
+.reply .who{ margin-bottom:.35rem; }
+.reply .who .best{ color:var(--jade); border:1px solid rgba(127,176,154,.3); padding:.02rem .4rem; border-radius:99px; font-size:.68rem; }
+
+.composer{ border:1px solid var(--line); border-radius:var(--r-l); background:var(--surf); padding:1.25rem; }
+.composer input,.composer textarea{
+  width:100%; background:var(--bg-lift); border:1px solid var(--line); border-radius:var(--r-s);
+  padding:.7rem .85rem; outline:none; font-size:.9rem; transition:border-color .2s; resize:vertical;
+}
+.composer input:focus,.composer textarea:focus{ border-color:var(--bronze-line); }
+.composer input::placeholder,.composer textarea::placeholder{ color:var(--tx-3); }
+.composer .row{ display:flex; gap:.6rem; align-items:center; justify-content:space-between; margin-top:.8rem; flex-wrap:wrap; }
+select.sel{ background:var(--bg-lift); border:1px solid var(--line); border-radius:99px; padding:.45rem .8rem; font-size:.845rem; outline:none; cursor:pointer; }
+
+/* ============================================================
+   progress
+   ============================================================ */
+.track-grid{ display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:center; padding:.9rem 0; border-top:1px solid var(--line); }
+.track-grid:first-of-type{ border-top:0; }
+.track-name{ display:flex; align-items:center; gap:.7rem; min-width:0; }
+.track-name b{ font-size:.94rem; font-weight:500; }
+.track-name span{ font-size:.775rem; color:var(--tx-3); display:block; }
+.dots{ display:flex; gap:6px; }
+.dot{
+  width:30px; height:30px; border-radius:9px; border:1px solid var(--line); background:transparent;
+  cursor:pointer; display:grid; place-items:center; font-size:.63rem; color:var(--tx-3);
+  transition:all .22s var(--ease);
+}
+.dot:hover{ border-color:var(--line-str); }
+.dot.on{ background:var(--bronze); border-color:var(--bronze); color:#17130B; font-weight:600; }
+.dot.today{ box-shadow:0 0 0 1px var(--bronze-line); }
+@media(max-width:700px){
+  .track-grid{ grid-template-columns:1fr; gap:.55rem; align-items:start; }
+  .dot{ width:100%; height:32px; }
+  .dots{ width:100%; }
+}
+
+.stat{ border:1px solid var(--line); border-radius:var(--r-m); padding:1.15rem 1.25rem; background:var(--surf); }
+.stat b{ font-family:var(--serif); font-size:2.1rem; font-weight:400; letter-spacing:-.03em; display:block; line-height:1.1; }
+.stat span{ font-size:.8rem; color:var(--tx-3); }
+.stat .delta{ font-size:.75rem; color:var(--jade); }
+
+.bars{ display:flex; align-items:flex-end; gap:9px; height:110px; }
+.bars div{ flex:1; background:linear-gradient(180deg,var(--bronze),rgba(210,164,94,.28)); border-radius:6px 6px 3px 3px; position:relative; min-height:4px; transition:height .7s var(--ease-out); }
+.bars div span{ position:absolute; bottom:-1.45rem; left:50%; translate:-50% 0; font-size:.7rem; color:var(--tx-3); }
+
+.goal{ padding:1.05rem 0; border-top:1px solid var(--line); }
+.goal:first-child{ border-top:0; padding-top:0; }
+.goal .gt{ display:flex; justify-content:space-between; gap:1rem; align-items:baseline; margin-bottom:.55rem; }
+.goal b{ font-size:.94rem; font-weight:500; }
+.goal .pct{ font-size:.8rem; color:var(--tx-3); font-variant-numeric:tabular-nums; }
+.bar{ height:5px; border-radius:99px; background:rgba(255,255,255,.07); overflow:hidden; }
+.bar i{ display:block; height:100%; border-radius:99px; background:var(--bronze); transition:width .9s var(--ease-out); }
+.bar i.j{ background:var(--jade); }
+.bar i.v{ background:var(--violet); }
+
+textarea.journal{
+  width:100%; min-height:110px; background:var(--bg-lift); border:1px solid var(--line);
+  border-radius:var(--r-m); padding:.95rem 1.05rem; outline:none; font-size:.915rem; line-height:1.6; resize:vertical;
+  transition:border-color .2s;
+}
+textarea.journal:focus{ border-color:var(--bronze-line); }
+
+/* ============================================================
+   learn / glossary
+   ============================================================ */
+.term{ border:1px solid var(--line); border-radius:var(--r-m); background:var(--surf); overflow:hidden; transition:border-color .25s; }
+.term:hover{ border-color:var(--line-str); }
+.term-h{ display:flex; align-items:center; gap:.85rem; padding:1.05rem 1.25rem; cursor:pointer; }
+.term-h h3{ font-size:1.02rem; flex:1; }
+.term-h .car{ width:22px; height:22px; display:grid; place-items:center; color:var(--tx-3); transition:transform .3s var(--ease); flex-shrink:0; }
+.term-h .car svg{ width:13px; height:13px; }
+.term.open .term-h .car{ transform:rotate(180deg); }
+.term-c{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .38s var(--ease); }
+.term.open .term-c{ grid-template-rows:1fr; }
+.term-c>div{ overflow:hidden; }
+.term-in{ padding:0 1.25rem 1.3rem; display:grid; gap:1rem; }
+.term-in .lbl{ font-size:.74rem; color:var(--tx-3); margin-bottom:.22rem; }
+.term-in p{ font-size:.895rem; color:var(--tx-2); line-height:1.62; }
+
+/* faq */
+.faq{ border-bottom:1px solid var(--line); }
+.faq-q{
+  width:100%; text-align:left; background:transparent; border:0; padding:1.2rem 2.6rem 1.2rem 0;
+  cursor:pointer; font-family:var(--serif); font-size:1.09rem; font-weight:400; letter-spacing:-.018em;
+  position:relative; color:var(--tx-2); transition:color .25s; line-height:1.34;
+}
+.faq.open .faq-q, .faq-q:hover{ color:var(--tx); }
+.faq-q .pm{ position:absolute; right:.2rem; top:1.45rem; width:13px; height:13px; }
+.faq-q .pm::before,.faq-q .pm::after{ content:""; position:absolute; background:var(--bronze); border-radius:2px; transition:transform .34s var(--ease); }
+.faq-q .pm::before{ inset:6px 0 6px 0; height:1.5px; }
+.faq-q .pm::after{ inset:0 6px 0 6px; width:1.5px; }
+.faq.open .faq-q .pm::after{ transform:scaleY(0); }
+.faq-a{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .38s var(--ease); }
+.faq.open .faq-a{ grid-template-rows:1fr; }
+.faq-a>div{ overflow:hidden; }
+.faq-a p{ padding-bottom:1.35rem; font-size:.925rem; color:var(--tx-2); line-height:1.68; max-width:70ch; }
+
+/* ============================================================
+   misc
+   ============================================================ */
+.cta-band{
+  border:1px solid var(--line); border-radius:var(--r-xl); padding:clamp(2rem,5vw,3.4rem);
+  background:radial-gradient(120% 140% at 12% 0%,rgba(210,164,94,.13),transparent 58%),var(--surf);
+  text-align:center; position:relative; overflow:hidden;
+}
+.cta-band .lede{ margin-inline:auto; margin-top:.95rem; }
+.cta-band .hero-actions{ justify-content:center; }
+
+.foot{ border-top:1px solid var(--line); padding-block:3.2rem 2.2rem; background:var(--bg-lift); margin-top:2rem; }
+.foot-grid{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:2rem; }
+@media(max-width:800px){ .foot-grid{ grid-template-columns:1fr 1fr; gap:2.2rem; } }
+.foot h5{ font-size:.82rem; font-weight:550; margin:0 0 .85rem; color:var(--tx); }
+.foot ul{ list-style:none; padding:0; margin:0; display:grid; gap:.55rem; }
+.foot a{ font-size:.865rem; color:var(--tx-3); transition:color .2s; cursor:pointer; }
+.foot a:hover{ color:var(--bronze); }
+.foot-bot{ margin-top:2.6rem; padding-top:1.5rem; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+.toast{
+  position:fixed; left:50%; bottom:24px; translate:-50% 0; z-index:500;
+  background:var(--surf-3); border:1px solid var(--line-str); border-radius:99px;
+  padding:.7rem 1.2rem; font-size:.875rem; display:flex; align-items:center; gap:.55rem;
+  box-shadow:var(--shadow); opacity:0; transform:translateY(16px); pointer-events:none;
+  transition:opacity .3s var(--ease), transform .3s var(--ease-out);
+}
+.toast.show{ opacity:1; transform:none; }
+.toast svg{ width:14px; height:14px; color:var(--jade); }
+
+.safety{
+  border:1px solid rgba(220,127,110,.26); background:linear-gradient(140deg,rgba(220,127,110,.075),transparent 60%);
+  border-radius:var(--r-l); padding:1.5rem 1.6rem;
+}
+.safety h3{ font-size:1.08rem; margin-bottom:.55rem; }
+
+.empty{ padding:3.2rem 1rem; text-align:center; border:1px dashed var(--line-str); border-radius:var(--r-l); }
+.empty p{ color:var(--tx-3); font-size:.9rem; margin-top:.4rem; }
+.hidden{ display:none !important; }
+.split{ display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
+@media(max-width:820px){ .split{ grid-template-columns:1fr; } }
+.side{ display:grid; grid-template-columns:1.62fr 1fr; gap:1.6rem; align-items:start; }
+@media(max-width:900px){ .side{ grid-template-columns:1fr; } }
+.sticky{ position:sticky; top:calc(var(--nav-h) + 1.2rem); }
+@media(max-width:900px){ .sticky{ position:static; } }
+</style>
+</head>
+<body>
+
+<!-- ========================= NAV ========================= -->
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#home">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="14.2" stroke="#D2A45E" stroke-width="1.4" opacity=".55"/>
+        <path d="M8.5 21.5C12 21.5 14.5 19 16.5 15.5C18.5 12 20.5 9.5 23.5 9.5" stroke="#D2A45E" stroke-width="1.9" stroke-linecap="round"/>
+        <circle cx="23.5" cy="9.5" r="2.6" fill="#D2A45E"/>
+      </svg>
+      <b>Refine<span>.</span></b>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#guides">Guides</a>
+      <a href="#grooming">Grooming</a>
+      <a href="#style">Style</a>
+      <a href="#community">Community</a>
+      <a href="#progress">Progress</a>
+      <a href="#learn">Learn</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <button class="btn btn-p btn-sm" data-go="progress">Open my tracker</button>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="sheet-top">
+    <a class="brand" href="#home">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="14.2" stroke="#D2A45E" stroke-width="1.4" opacity=".55"/>
+        <path d="M8.5 21.5C12 21.5 14.5 19 16.5 15.5C18.5 12 20.5 9.5 23.5 9.5" stroke="#D2A45E" stroke-width="1.9" stroke-linecap="round"/>
+        <circle cx="23.5" cy="9.5" r="2.6" fill="#D2A45E"/>
+      </svg>
+      <b>Refine<span>.</span></b>
+    </a>
+    <button class="btn btn-icn" id="sheetClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav id="sheetNav"></nav>
+  <div class="sheet-foot">
+    <button class="btn btn-p btn-full" data-go="progress">Open my tracker</button>
+    <p class="micro" style="margin-top:.9rem;text-align:center">Everything you log stays in this browser.</p>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ========================= HOME ========================= -->
+<section class="view" id="view-home">
+  <div class="hero">
+    <div class="hero-glow" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-tag"><span>Self-improvement without the nonsense</span><b>new in 2026</b></div>
+        <h1 class="d1">The version of looksmaxxing that <em class="wonk">actually</em> works is boring, repeatable and yours.</h1>
+        <p class="lede">Refine is where people compare notes on skin, hair, training, style and presence — with the hype filtered out. No ratings, no scales, no surgery talk aimed at teenagers. The site launched in 2026, so what is here right now is the writing, the routines and a board that is only just opening.</p>
+        <div class="hero-actions">
+          <button class="btn btn-p" data-go="guides">Start with the fundamentals</button>
+          <button class="btn btn-g" data-go="community">See what people are asking</button>
+        </div>
+        <div class="hero-proof">
+          <div><b data-count="13">0</b><span>guides and routines</span></div>
+          <div><b data-count="12">0</b><span>community terms explained</span></div>
+          <div><b>2026</b><span>the year this launched</span></div>
+        </div>
+        <p class="micro" style="margin-top:1.4rem;max-width:46ch">We have no membership figure to show you and no professional has reviewed this content. When either changes, it will say so here.</p>
+      </div>
+
+      <div class="panel" id="heroPanel">
+        <div class="panel-top">
+          <div>
+            <h3>Today</h3>
+            <p id="heroDate">—</p>
+          </div>
+          <div class="ring">
+            <svg viewBox="0 0 52 52"><circle class="bg" cx="26" cy="26" r="22"/><circle class="fg" id="heroRing" cx="26" cy="26" r="22" stroke-dasharray="138.2" stroke-dashoffset="138.2"/></svg>
+            <b id="heroPct">0%</b>
+          </div>
+        </div>
+        <div id="heroHabits"></div>
+        <div class="panel-foot">
+          <div>
+            <div class="week" id="heroWeek"></div>
+            <p class="micro" style="margin-top:.5rem">Last 7 days</p>
+          </div>
+          <button class="btn btn-g btn-sm" data-go="progress">Full tracker</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+
+  <div class="section wrap">
+    <div class="head-block" data-reveal>
+      <div class="kicker">Where to put your effort</div>
+      <h2 class="d2">Five things account for most of the difference. Everything else is decoration.</h2>
+      <p class="lede">Ranked by how much they change how you look and feel relative to what they cost you. If you're new, work down this list in order and ignore everything else for three months.</p>
+    </div>
+    <div class="pillars" data-reveal id="pillars"></div>
+    <p class="micro" style="margin-top:1.1rem;max-width:64ch">Nothing here requires money, a procedure or a "genetic ceiling" conversation. The people who get the furthest are almost always the ones who found this list boring and did it anyway.</p>
+  </div>
+
+  <div class="section-tight wrap">
+    <div class="split">
+      <div class="card" data-reveal>
+        <div class="c-icon jade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h3>What you'll find here</h3>
+        <ul class="bullets ok" style="margin-top:.9rem">
+          <li>Routines written as checklists, with a time cost attached to each step</li>
+          <li>Honest labels on evidence: what's well supported, what's plausible, what's marketing</li>
+          <li>A community that answers questions instead of scoring faces</li>
+          <li>A tracker built around habits, not weight or calories</li>
+        </ul>
+      </div>
+      <div class="card" data-reveal>
+        <div class="c-icon clay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+        <h3>What you won't</h3>
+        <ul class="bullets x" style="margin-top:.9rem">
+          <li>Rating threads, PSL scores, or ranking anyone's face on a number line</li>
+          <li>Crash diets, extreme cuts, or anything that treats hunger as discipline</li>
+          <li>Instructions for procedures that belong in a clinic, or DIY versions of them</li>
+          <li>The idea that there's a fixed ceiling on you and it's already been decided</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-tight wrap">
+    <div class="head-block" data-reveal>
+      <div class="kicker">Context, with sources</div>
+      <h2 class="d3">What is actually known about all this</h2>
+      <p class="lede">Refine launched in 2026. It has no audience figures worth quoting, no clinicians on staff and no research of its own. What follows is outside reporting, linked so you can check it yourself rather than take our word for it.</p>
+    </div>
+    <div class="grid g-2" id="contextGrid"></div>
+    <p class="micro" style="margin-top:1.2rem;max-width:66ch">Where this site asserts something it cannot source, it says so instead of dressing it up. None of the research described above is ours.</p>
+  </div>
+
+  <div class="section wrap">
+    <div class="head-block" data-reveal>
+      <div class="kicker">Read first</div>
+      <h2 class="d2">The guides people actually finish</h2>
+      <p class="lede">Each one is a short read plus a routine you can run the same evening. Pick the area that's bothering you most.</p>
+    </div>
+    <div class="grid g-3" id="homeGuides"></div>
+    <div style="margin-top:1.6rem"><button class="btn btn-g" data-go="guides">All 13 guides</button></div>
+  </div>
+
+  <div class="section-tight wrap">
+    <div class="head-block" data-reveal style="margin-bottom:1.8rem">
+      <div class="kicker">From the forum this week</div>
+      <h2 class="d3">Questions in progress</h2>
+      <p class="micro" style="margin-top:.7rem">Sample threads — the board opened with the site in 2026 and has no real posts yet.</p>
+    </div>
+    <div class="grid" id="homeThreads" style="gap:.85rem"></div>
+    <div style="margin-top:1.4rem"><button class="btn btn-g" data-go="community">Open the community</button></div>
+  </div>
+
+  <div class="section wrap">
+    <div class="cta-band" data-reveal>
+      <h2 class="d2" style="max-width:19ch;margin-inline:auto">Three months of dull consistency beats any single trick.</h2>
+      <p class="lede" style="text-align:center">Set up five habits, check them off, and come back in ninety days. The tracker is free, local to your browser, and doesn't ask for an email.</p>
+      <div class="hero-actions">
+        <button class="btn btn-p" data-go="progress">Set up my habits</button>
+        <button class="btn btn-q" data-go="learn">Read the terminology first</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= GUIDES ========================= -->
+<section class="view" id="view-guides">
+  <div class="section wrap">
+    <div class="head-block">
+      <div class="kicker">Guides</div>
+      <h2 class="d2">Thirteen guides, each one finishable in a sitting</h2>
+      <p class="lede">Every guide carries a difficulty, a realistic time cost, and how long before you'd expect to notice anything. Where the evidence is thin, it says so.</p>
+    </div>
+    <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1.3rem">
+      <div class="filters" id="guideFilters" style="margin-bottom:0"></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="guideSearch" placeholder="Search guides" aria-label="Search guides">
+      </div>
+    </div>
+    <div class="grid g-3" id="guideGrid"></div>
+    <div class="empty hidden" id="guideEmpty">
+      <h3 class="d4">No guide matches that</h3>
+      <p>Try a broader word — "skin", "hair", "posture" — or clear the filter to see all thirteen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= GROOMING ========================= -->
+<section class="view" id="view-grooming">
+  <div class="section wrap">
+    <div class="head-block">
+      <div class="kicker">Grooming</div>
+      <h2 class="d2">A routine you can run half-asleep</h2>
+      <p class="lede">The morning block takes about six minutes, the evening block about eight. Steps marked optional are genuinely optional — skipping them costs you very little.</p>
+    </div>
+
+    <div class="side">
+      <div>
+        <div class="tabs" id="routineTabs" style="margin-bottom:1.6rem">
+          <button class="on" data-tab="am">Morning</button>
+          <button data-tab="pm">Evening</button>
+          <button data-tab="wk">Weekly</button>
+          <button data-tab="mo">Monthly</button>
+        </div>
+        <div class="card" style="padding:1.5rem 1.6rem">
+          <div class="tabpane on" id="pane-am"><div class="routine" id="rAM"></div></div>
+          <div class="tabpane" id="pane-pm"><div class="routine" id="rPM"></div></div>
+          <div class="tabpane" id="pane-wk"><div class="routine" id="rWK"></div></div>
+          <div class="tabpane" id="pane-mo"><div class="routine" id="rMO"></div></div>
+        </div>
+
+        <div class="head-block" style="margin-top:3.4rem;margin-bottom:1.6rem">
+          <h3 class="d3">The rest of it</h3>
+          <p class="lede">Areas people forget until someone points them out.</p>
+        </div>
+        <div class="grid g-2" id="groomCards"></div>
+      </div>
+
+      <aside class="sticky">
+        <div class="card" style="background:var(--surf-2)">
+          <h3 class="d4">Buying order for a beginner</h3>
+          <p class="body-s" style="margin-top:.5rem">If you own nothing, buy in this order and stop when the budget runs out. The first three do most of the work.</p>
+          <ol class="steps" style="margin-top:1.2rem" id="buyOrder"></ol>
+          <div class="note" style="margin-top:1.2rem">Total for the first three, in most countries, is less than one bottle of a "premium" serum. Price and effectiveness stopped correlating somewhere around the second shelf.</div>
+        </div>
+        <div class="card" style="margin-top:1.1rem">
+          <h3 class="d4">One rule that prevents most damage</h3>
+          <p class="body-s" style="margin-top:.5rem">Add one new product at a time, and give it two weeks before adding the next. When six things go on your face at once and your skin reacts, you've learned nothing about which one did it.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= STYLE ========================= -->
+<section class="view" id="view-style">
+  <div class="section wrap">
+    <div class="head-block">
+      <div class="kicker">Style</div>
+      <h2 class="d2">Fit first, then colour, then everything else</h2>
+      <p class="lede">A cheap shirt that fits reads better than an expensive one that doesn't. Start with the fit checklist below, then pick a direction that suits the life you actually live — not the one in the reference photos.</p>
+    </div>
+
+    <div class="head-block" style="margin-bottom:1.5rem">
+      <h3 class="d3">Six directions worth knowing</h3>
+      <p class="lede">None is better than another. The useful question is which one matches your climate, your job and the amount of attention you want.</p>
+    </div>
+    <div class="grid g-3" id="aesGrid"></div>
+
+    <div class="side" style="margin-top:4rem">
+      <div>
+        <div class="head-block" style="margin-bottom:1.4rem">
+          <h3 class="d3">The fit checklist</h3>
+          <p class="lede">Stand in front of a mirror with what you're wearing now and go down the list. Anything unchecked is worth a tailor or a different size before it's worth a new purchase.</p>
+        </div>
+        <div class="card">
+          <div class="fitcheck" id="fitCheck"></div>
+        </div>
+        <p class="micro" style="margin-top:.9rem">Checks are saved in this browser so you can come back to it.</p>
+      </div>
+      <aside>
+        <div class="card" style="background:var(--surf-2)">
+          <h3 class="d4">Colour, simplified</h3>
+          <p class="body-s" style="margin-top:.5rem">You don't need a season analysis. Two rules cover most situations.</p>
+          <ul class="bullets" style="margin-top:1rem">
+            <li><b style="color:var(--tx)">Contrast:</b> match the contrast of your outfit to the contrast between your hair and skin. High contrast suits crisp pairings; low contrast suits tonal ones.</li>
+            <li><b style="color:var(--tx)">Anchors:</b> keep three quiet colours in rotation — one dark, one mid, one light. Add one colour you like. That's a wardrobe.</li>
+          </ul>
+        </div>
+        <div class="card" style="margin-top:1.1rem">
+          <h3 class="d4">The capsule, in twelve pieces</h3>
+          <ul class="aes-list" style="margin-top:.9rem" id="capsule"></ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= COMMUNITY ========================= -->
+<section class="view" id="view-community">
+  <div class="section wrap">
+    <div class="head-block">
+      <div class="kicker">Community</div>
+      <h2 class="d2">Ask the question you've been searching for at 2am</h2>
+      <p class="lede">Threads are sorted by how useful people found the answers, not by how dramatic the title is. Anything that turns into a rating request gets closed.</p>
+    </div>
+
+    <div class="note clay" style="margin-bottom:2rem;max-width:80ch"><b>The board is new.</b> The threads below are sample discussions, written to show how the categories and replies work. They are not real posts and the handles are not real people. Anything you post is stored in your own browser and visible only to you.</div>
+
+    <div class="side">
+      <div>
+        <div class="filters" id="threadFilters"></div>
+        <div class="grid" id="threadList" style="gap:.85rem"></div>
+        <div class="empty hidden" id="threadEmpty">
+          <h3 class="d4">Nothing in this category yet</h3>
+          <p>Be the first — the composer below posts straight to your view of the board.</p>
+        </div>
+
+        <div class="composer" style="margin-top:1.6rem">
+          <h3 class="d4" style="margin-bottom:.9rem">Start a thread</h3>
+          <div class="stack-s">
+            <input id="thTitle" placeholder="What do you want to know?" maxlength="120">
+            <textarea id="thBody" rows="3" placeholder="Give people enough to work with — what you've already tried, how long for, what changed." maxlength="600"></textarea>
+          </div>
+          <div class="row">
+            <select class="sel" id="thCat">
+              <option value="Skin">Skin</option>
+              <option value="Hair">Hair</option>
+              <option value="Training">Training</option>
+              <option value="Style">Style</option>
+              <option value="Mindset">Mindset</option>
+              <option value="Wins">Wins</option>
+            </select>
+            <button class="btn btn-p btn-sm" id="thPost">Post thread</button>
+          </div>
+          <p class="micro" style="margin-top:.8rem">This is a demo board — your post is saved in this browser and visible only to you.</p>
+        </div>
+      </div>
+
+      <aside class="sticky">
+        <div class="card" style="background:var(--surf-2)">
+          <h3 class="d4">House rules</h3>
+          <ol class="steps" style="margin-top:1.1rem" id="rules"></ol>
+        </div>
+        <div class="card" style="margin-top:1.1rem">
+          <h3 class="d4">Verified professionals</h3>
+          <div class="empty" style="padding:1.5rem 1rem;margin-top:.9rem">
+            <p style="margin:0">None yet.</p>
+          </div>
+          <p class="body-s" style="margin-top:1rem">No dermatologist, doctor, coach or other professional has joined this site or reviewed anything on it. If that changes, accounts will be listed here along with the credential and how it was checked.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= PROGRESS ========================= -->
+<section class="view" id="view-progress">
+  <div class="section wrap">
+    <div class="head-block">
+      <div class="kicker">Progress</div>
+      <h2 class="d2">Track the habit, not the outcome</h2>
+      <p class="lede">Skin, hair and strength all move on a scale of months. Daily photos and daily weigh-ins mostly measure noise — and for a lot of people they turn into something worse. So this tracks what you did, and nothing else.</p>
+    </div>
+
+    <div class="grid g-4" style="margin-bottom:1.8rem" id="statRow"></div>
+
+    <div class="side">
+      <div>
+        <div class="card" style="padding:1.5rem 1.6rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem">
+            <div>
+              <h3 class="d4">This week</h3>
+              <p class="micro" style="margin-top:.2rem">Tap a day to mark it done. Today is outlined.</p>
+            </div>
+            <div class="tag" id="weekRange">—</div>
+          </div>
+          <div id="trackList"></div>
+          <div style="display:flex;gap:.6rem;margin-top:1.4rem;flex-wrap:wrap">
+            <input id="newHabit" placeholder="Add a habit of your own" maxlength="42"
+              style="flex:1;min-width:180px;background:var(--bg-lift);border:1px solid var(--line);border-radius:99px;padding:.55rem .95rem;outline:none;font-size:.88rem">
+            <button class="btn btn-g btn-sm" id="addHabit">Add habit</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1.1rem;padding:1.5rem 1.6rem">
+          <h3 class="d4">Consistency, last eight weeks</h3>
+          <p class="micro" style="margin-top:.2rem;margin-bottom:1.6rem">Share of your habits completed each week.</p>
+          <div class="bars" id="bars"></div>
+          <div style="height:1.6rem"></div>
+        </div>
+
+        <div class="card" style="margin-top:1.1rem;padding:1.5rem 1.6rem">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.9rem">
+            <h3 class="d4">Weekly note</h3>
+            <span class="micro" id="noteSaved"></span>
+          </div>
+          <p class="body-s" style="margin-bottom:.9rem">One honest paragraph a week is worth more than a hundred progress photos. What felt easier? What did you skip, and why?</p>
+          <textarea class="journal" id="journal" placeholder="This week I…"></textarea>
+        </div>
+      </div>
+
+      <aside class="sticky">
+        <div class="card">
+          <h3 class="d4">Ninety-day goals</h3>
+          <p class="micro" style="margin-top:.25rem;margin-bottom:1.2rem">Process goals only. Nothing here is a number on a scale.</p>
+          <div id="goals"></div>
+        </div>
+        <div class="card safety" style="margin-top:1.1rem">
+          <h3>When this stops being useful</h3>
+          <p class="body-s" style="margin-top:.5rem">Self-improvement is supposed to cost you a little time and give you back some confidence. If the trade has flipped, that's worth taking seriously.</p>
+          <ul class="bullets x" style="margin-top:1rem">
+            <li>You're checking mirrors, photos or lighting so often it eats into your day</li>
+            <li>You're skipping meals, plans or people because of how you think you look</li>
+            <li>A missed day feels like a moral failure rather than a missed day</li>
+            <li>The list of things you'd need to fix keeps growing no matter what you do</li>
+          </ul>
+          <p class="body-s" style="margin-top:1rem">Any of those is a reason to talk to a doctor or a licensed therapist. It's a common pattern, it's treatable, and it isn't a character flaw.</p>
+        </div>
+        <button class="btn btn-q btn-sm" id="resetData" style="margin-top:1rem">Reset my tracker data</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= LEARN ========================= -->
+<section class="view" id="view-learn">
+  <div class="section wrap">
+    <div class="head-block">
+      <div class="kicker">Learn</div>
+      <h2 class="d2">The vocabulary, explained straight</h2>
+      <p class="lede">You'll meet these words within five minutes of finding any of this online. Some describe something real. Some are folk science. One or two describe self-harm with a nickname attached. Here's which is which.</p>
+    </div>
+
+    <div class="filters" id="termFilters"></div>
+    <div class="grid" id="termList" style="gap:.7rem"></div>
+
+    <div class="split" style="margin-top:3rem">
+      <div class="card safety">
+        <h3>Hard lines</h3>
+        <p class="body-s" style="margin-top:.5rem">A short list of things that circulate as advice and shouldn't. Not because they're edgy — because people get hurt.</p>
+        <ul class="bullets x" style="margin-top:1.1rem">
+          <li>Striking your own face or jaw to "stimulate bone growth". It causes fractures, nerve damage and asymmetry. There is no mechanism by which it works.</li>
+          <li>Prescription-only medication bought from a grey-market seller, at doses copied from a forum post</li>
+          <li>Aggressive restriction, fasting stacked on fasting, or any plan that treats hunger as proof it's working</li>
+          <li>DIY dermarolling, chemical peels or injectables at home</li>
+          <li>Any procedure marketed to under-18s, and any adult who encourages one</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="d4">How we label evidence</h3>
+        <p class="body-s" style="margin-top:.5rem">Every claim on this site carries one of four labels. They're applied conservatively.</p>
+        <div class="stack-m" style="margin-top:1.2rem" id="evidenceKey"></div>
+        <div class="note jade" style="margin-top:1.3rem">None of this is medical advice. For anything involving prescriptions, persistent skin conditions, hair loss or your mental health, a professional who can actually look at you beats any forum consensus.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= FAQ ========================= -->
+<section class="view" id="view-faq">
+  <div class="section wrap">
+    <div class="head-block">
+      <div class="kicker">FAQ</div>
+      <h2 class="d2">Questions that come up constantly</h2>
+      <p class="lede">If yours isn't here, the community board is the faster route.</p>
+    </div>
+    <div class="side">
+      <div>
+        <div class="search" style="max-width:100%;margin-bottom:1.6rem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input type="search" id="faqSearch" placeholder="Search questions" aria-label="Search questions">
+        </div>
+        <div id="faqList"></div>
+        <div class="empty hidden" id="faqEmpty">
+          <h3 class="d4">Nothing matches that wording</h3>
+          <p>Try a single keyword, or ask on the community board.</p>
+        </div>
+      </div>
+      <aside class="sticky">
+        <div class="card" style="background:var(--surf-2)">
+          <h3 class="d4">Still stuck?</h3>
+          <p class="body-s" style="margin-top:.5rem">Post it on the board with what you've tried and how long for. Vague questions get vague answers.</p>
+          <button class="btn btn-g btn-sm btn-full" style="margin-top:1rem" data-go="community">Ask the community</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========================= FOOTER ========================= -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#home" style="margin-bottom:.9rem">
+          <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <circle cx="16" cy="16" r="14.2" stroke="#D2A45E" stroke-width="1.4" opacity=".55"/>
+            <path d="M8.5 21.5C12 21.5 14.5 19 16.5 15.5C18.5 12 20.5 9.5 23.5 9.5" stroke="#D2A45E" stroke-width="1.9" stroke-linecap="round"/>
+            <circle cx="23.5" cy="9.5" r="2.6" fill="#D2A45E"/>
+          </svg>
+          <b>Refine<span>.</span></b>
+        </a>
+        <p class="body-s" style="max-width:38ch">A community for appearance-focused self-improvement that stays on the healthy side of the line. Educational content only — not medical advice.</p>
+      </div>
+      <div>
+        <h5>Learn</h5>
+        <ul>
+          <li><a data-go="guides">All guides</a></li>
+          <li><a data-go="grooming">Grooming routines</a></li>
+          <li><a data-go="style">Style &amp; fit</a></li>
+          <li><a data-go="learn">Terminology</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Community</h5>
+        <ul>
+          <li><a data-go="community">The board</a></li>
+          <li><a data-go="community">House rules</a></li>
+          <li><a data-go="progress">Habit tracker</a></li>
+          <li><a data-go="faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Looking after yourself</h5>
+        <ul>
+          <li><a data-go="progress">Signs to watch for</a></li>
+          <li><a data-go="learn">What we won't publish</a></li>
+          <li><a data-go="learn">How we label evidence</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <p class="micro">© 2026 Refine. Independent, ad-free, no affiliate links.</p>
+      <p class="micro">If appearance worries are affecting your daily life, please speak to a doctor or a licensed therapist.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ========================= MODAL ========================= -->
+<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <article class="modal" id="modal">
+    <div class="grip"></div>
+    <div class="modal-head">
+      <div class="tag-row" id="modalTags" style="margin-bottom:.7rem"></div>
+      <h2 class="d3" id="modalTitle">—</h2>
+      <div class="meta" id="modalMeta" style="margin-top:.7rem"></div>
+      <button class="btn btn-icn x" id="modalClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </article>
+</div>
+
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span id="toastMsg">Saved</span></div>
+
+
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   icons
+   ============================================================ */
+const I = {
+  drop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3s6 6.4 6 10.4A6 6 0 0 1 6 13.4C6 9.4 12 3 12 3z"/></svg>',
+  sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>',
+  scissors:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.1 7.6L20 18M20 6L8.1 16.4"/></svg>',
+  shirt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 3l3 2 3-2 5 3-2 4-2-1v11H8V9L6 10 4 6z"/></svg>',
+  dumbbell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/></svg>',
+  spine:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3v18"/><path d="M9 6h6M8.5 10h7M9 14h6M9.5 18h5"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  brain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8V15a3 3 0 0 0 4 2.8V20M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8V15a3 3 0 0 1-4 2.8V20M12 4v16"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>',
+  gauge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l3.5-4"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+  flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3c3 4 5 5.5 5 9a5 5 0 0 1-10 0c0-1.8.8-3 2-4.2 0 1.6.8 2.4 1.7 2.4C12.3 10.2 11 7 12 3z"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6 11l6-6 6 6"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+  msg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z"/></svg>'
+};
+
+/* ============================================================
+   content
+   ============================================================ */
+const PILLARS = [
+  {n:"Ranked 1st", t:"Sleep", d:"Nothing else in this list works properly without it. Seven to nine hours, at roughly the same time, changes your skin, your training, your mood and your face before any product does."},
+  {n:"Ranked 2nd", t:"Body composition", d:"Regular training and eating enough to support it. It changes your shoulders, your jaw and how clothes sit on you — and it is the single slowest, most reliable lever you have."},
+  {n:"Ranked 3rd", t:"Skin and grooming", d:"A four-product routine, a haircut that suits your head, and clean details. Cheap, fast, and the first thing anyone actually notices."},
+  {n:"Ranked 4th", t:"Clothes that fit", d:"Not more clothes. Fewer, in the right size, in three colours you can combine without thinking. A tailor is the highest-leverage money in this entire list."},
+  {n:"Ranked 5th", t:"How you carry it", d:"Posture, unhurried speech, eye contact, not apologising for occupying space. It is learnable, it is free, and it changes first impressions more than most people expect."}
+];
+
+const TICKER = ["Sunscreen is the highest-return thing on this site","No rating threads, ever","Give any routine 12 weeks before you judge it","Eat enough to train","One new product at a time","A tailor beats a bigger budget","Sleep is not optional","Ask a dermatologist, not a forum","Consistency over intensity","Your camera lens is lying to you"];
+
+const GUIDES = [
+  {id:"g1",cat:"Skin",icon:"drop",title:"Skincare, starting from nothing",level:"Beginner",time:"6 min a day",horizon:"8–12 weeks",ev:"Supported",
+   sum:"Four products, two minutes twice a day. This is the whole thing, and almost everything sold beyond it is optional.",
+   why:"Most visible skin improvement comes from three things: not stripping your barrier, keeping it hydrated, and blocking UV. Actives are a refinement on top of that, not a replacement for it.",
+   steps:[
+     {b:"Cleanse with something gentle",p:"A non-foaming or low-foam cleanser, lukewarm water, thirty seconds. If your skin feels tight and squeaky afterwards, the cleanser is too harsh."},
+     {b:"Moisturise while damp",p:"Within a minute of patting dry. Lighter gel-cream if you are oily, thicker cream if you are dry. Both morning and night."},
+     {b:"Sunscreen every morning",p:"SPF 30 or higher, broad spectrum, applied as the last step. This is the step with the most evidence behind it and the one most people skip."},
+     {b:"Wait four weeks before adding anything",p:"Get the base stable first. Then, if you still want more, add one active — and only one."},
+     {b:"Patch test new products",p:"A small amount on the jaw for three nights before it goes anywhere near your whole face."}
+   ],
+   miss:["Exfoliating every day. Twice a week is plenty for most people and more causes the irritation you are trying to fix.","Changing the whole routine every fortnight because week two looked no different.","Kitchen ingredients — lemon, baking soda, toothpaste. They damage the barrier and there is no upside."],
+   note:"If you have persistent redness, painful spots or anything that scars, skip the trial-and-error and see a dermatologist. Twelve weeks of guessing is twelve weeks of scarring."},
+
+  {id:"g2",cat:"Skin",icon:"drop",title:"Treating acne without wrecking your barrier",level:"Intermediate",time:"8 min a day",horizon:"12 weeks",ev:"Supported",
+   sum:"Most people fail here by going too hard, too fast. The winning pattern is low strength, low frequency, ramped up slowly.",
+   why:"Both benzoyl peroxide and topical retinoids have solid evidence behind them. Both also irritate skin that is not eased into them, and irritation makes acne look worse, which makes people quit at week three.",
+   steps:[
+     {b:"Work out what you are treating",p:"Blackheads and whiteheads, inflamed spots, or deep painful lumps. The third kind is a doctor conversation, not a drugstore one."},
+     {b:"Pick one active, not three",p:"An over-the-counter benzoyl peroxide wash, or an adapalene gel. Running both at once at full strength is the classic mistake."},
+     {b:"Start twice a week",p:"Then three, then alternate nights, then nightly if your skin tolerates it. Moving up a level every two weeks is a sensible pace."},
+     {b:"Moisturise more, not less",p:"Buffering with moisturiser before or after the active reduces irritation without removing the benefit."},
+     {b:"Leave your face alone",p:"Picking converts a spot that would have healed in four days into a mark that lasts four months."},
+     {b:"Reassess at twelve weeks",p:"Real change takes that long. If there is none, or you are scarring, that is the point to see a doctor about prescription options."}
+   ],
+   miss:["Judging progress on a bad-lighting bathroom photo at week two.","Scrubbing. Acne is not dirt and friction makes inflammation worse.","Stopping the moment it clears — most treatments are maintenance, not a course."],
+   note:"Purging is real for retinoids but should settle within about six weeks. Burning, peeling sheets of skin, or a rash is irritation, not purging — stop and scale back."},
+
+  {id:"g3",cat:"Skin",icon:"sun",title:"Sun protection, the highest-return habit here",level:"Beginner",time:"30 seconds",horizon:"Years",ev:"Strong",
+   sum:"If you only adopt one thing from this entire site, adopt this one. It is the closest thing to a free result that exists.",
+   why:"Cumulative UV exposure drives most of what people call ageing in skin — texture, uneven tone, loss of firmness — and it is the one input you can almost entirely control.",
+   steps:[
+     {b:"Broad spectrum, SPF 30 minimum",p:"Higher is fine. The label needs to say broad spectrum or UVA protection, not just a number."},
+     {b:"Use enough",p:"Roughly two fingers' length for face and neck. Most people apply a third of what the SPF rating was tested at, and get a third of the protection."},
+     {b:"Reapply if you are outdoors",p:"Every couple of hours in real sun. If you are indoors all day, the morning application is fine."},
+     {b:"Find a texture you will tolerate",p:"The best sunscreen is the one you do not resent. Modern fluids and gels feel nothing like the stuff you remember from school trips."},
+     {b:"Cloudy days still count",p:"UVA passes through cloud and window glass. If you sit by a window at work, you are being exposed."}
+   ],
+   miss:["Relying on the SPF in a moisturiser or foundation — the amount applied is never close to enough.","Skipping ears, neck and the back of the hands.","Treating it as a summer product."],
+   note:"If you have deeper skin and dislike white cast, look for chemical or hybrid formulas and tinted mineral options. This is a formula problem, not a reason to skip it."},
+
+  {id:"g4",cat:"Hair",icon:"scissors",title:"Finding a haircut that suits your head",level:"Beginner",time:"One appointment",horizon:"Immediate",ev:"Practical",
+   sum:"A cut that fits your face shape, hair type and growth pattern will do more for you in forty minutes than months of product.",
+   why:"Haircuts work by balancing proportions — adding height where a face is wide, adding width where it is long, and keeping the outline clean. Most bad cuts are a mismatch between the reference photo and the hair actually on your head.",
+   steps:[
+     {b:"Work out your hair type before your face shape",p:"Straight, wavy, curly, coily, fine, thick. A style that needs thick straight hair will never behave on fine wavy hair, whatever your jaw looks like."},
+     {b:"Note where your hair actually grows",p:"Cowlicks, a low or high hairline, a strong part. Tell the barber — they will work with it rather than fighting it every four weeks."},
+     {b:"Balance the proportions",p:"Rounder faces tend to suit height on top and tighter sides. Longer faces suit a little more weight at the sides and less height."},
+     {b:"Bring three photos, not one",p:"Ideally of someone with similar hair to yours. Photos communicate far better than the name of a cut, which means different things in different shops."},
+     {b:"Book your next one before you leave",p:"Most cuts look best between week two and week five. A standing four-to-six week appointment removes the decision entirely."}
+   ],
+   miss:["Asking for a cut you saw on hair that is nothing like yours.","Going shorter and shorter each visit by accident — say the number you want.","Buying product before fixing the cut. Product cannot rescue the wrong shape."],
+   note:"If your barber has never once disagreed with you, consider a different barber. The good ones tell you when something will not work."},
+
+  {id:"g5",cat:"Hair",icon:"scissors",title:"Early thinning: what to do in the first year",level:"Intermediate",time:"Ongoing",horizon:"6–12 months",ev:"Mixed",
+   sum:"The single most useful thing about hair loss is that early action works far better than late action. The second is that almost nothing sold online without a prescription does anything.",
+   why:"Pattern hair loss is progressive. Treatments that have real evidence work mainly by holding ground and thickening what remains — which is much easier while there is still something to hold.",
+   steps:[
+     {b:"Confirm it properly",p:"Take a photo of your part line and hairline in the same lighting, monthly. Shedding varies by season and stress; a trend over months is signal, a bad week is not."},
+     {b:"See a doctor early, not eventually",p:"Thinning has several causes — some are nutritional, thyroid-related or stress-driven and fully reversible. Getting the cause right is the whole game."},
+     {b:"Ask about the options with evidence",p:"There are topical and oral treatments with genuine research behind them, and they have real side-effect profiles worth discussing with a clinician who knows your history. That conversation belongs in a consultation, not a comment section."},
+     {b:"Ignore grey-market sellers",p:"Unverified suppliers, forum dosing schedules and compounded mystery bottles are how people end up with problems that had nothing to do with hair."},
+     {b:"Adjust the cut in parallel",p:"Shorter sides, less length on top and matte product make thinning far less visible while you decide what else to do."}
+   ],
+   miss:["Waiting two years to see whether it is really happening.","Caffeine shampoos, rosemary miracle threads, and anything with a before-and-after in the ad.","Assuming a shaved head would look bad before ever trying it. Many people prefer it and stop thinking about hair entirely."],
+   note:"Nothing on this page is a prescription or a recommendation to take anything. It is a prompt to have the conversation with a professional while it is still early."},
+
+  {id:"g7",cat:"Grooming",icon:"clock",title:"The fifteen-minute weekly reset",level:"Beginner",time:"15 min a week",horizon:"Immediate",ev:"Practical",
+   sum:"The details nobody compliments and everybody notices. One block, once a week, usually Sunday.",
+   why:"Grooming failures are rarely about doing something badly — they are about not having a scheduled slot in which the boring maintenance happens at all.",
+   steps:[
+     {b:"Nails, hands and feet",p:"Cut straight, file the edges, push cuticles back gently. Hands are in more conversations than your haircut is."},
+     {b:"Brows: tidy, do not design",p:"Remove the strays between and well below. Keep the natural shape. A brow that looks groomed is good; a brow that looks drawn is not."},
+     {b:"Ears, nose and neckline",p:"A rotary trimmer, thirty seconds. Then clean the hairline at the back of the neck if you can reach it, or leave it for the barber."},
+     {b:"Teeth check",p:"Fresh brush head every three months, floss actually used, and a dentist visit booked if the last one was over a year ago. Teeth outrank almost everything else on a face."},
+     {b:"Laundry and shoes",p:"Wash what needs washing, clean the shoes you wear most. Scuffed shoes undo a good outfit faster than anything else."}
+   ],
+   miss:["Doing all of this the morning of something important instead of the week before.","Over-plucking brows — they do not always grow back the same.","Ignoring shoes. People look at them."],
+   note:"Put it in a calendar with a name that is not — honestly — embarrassing to see on a shared screen. It survives longer that way."},
+
+  {id:"g8",cat:"Style",icon:"shirt",title:"Building a capsule that fits your actual life",level:"Beginner",time:"An afternoon",horizon:"Immediate",ev:"Practical",
+   sum:"Twelve pieces you like, in colours that combine, beats forty that do not. Start by counting the situations you actually dress for.",
+   why:"Most wardrobes fail because they were bought for an imagined life. The fix is arithmetic: list the occasions you have in a normal month, then own enough for those and no more.",
+   steps:[
+     {b:"Audit what you own",p:"Three piles: worn in the last month, not worn but fits, does not fit or is worn out. Be ruthless with the third pile."},
+     {b:"Count your real occasions",p:"Work, casual, one step smarter, exercise. Write the rough number of days a month for each. That ratio is your buying plan."},
+     {b:"Pick three neutrals and one accent",p:"One dark, one mid, one light, plus a colour you like. Every top should work with every bottom."},
+     {b:"Buy the boring things first",p:"Well-fitting trousers, a plain crew or henley, an overshirt or jacket, clean footwear. Statement pieces come last and are the easiest to get wrong."},
+     {b:"Budget for tailoring",p:"Reserve a share of every purchase for alterations. A shortened sleeve or a taper is often under a tenth of the garment price."}
+   ],
+   miss:["Buying a whole aesthetic in one order because a single reference photo looked good.","Ignoring climate. A wardrobe you sweat through is not a wardrobe.","Keeping things because they were expensive. Sunk cost is not a size."],
+   note:"Take a photo of each outfit that works. On low-energy mornings a folder of proven combinations is worth more than taste."},
+
+  {id:"g9",cat:"Style",icon:"shirt",title:"Fit and tailoring: what is cheap to fix",level:"Intermediate",time:"One visit",horizon:"Immediate",ev:"Practical",
+   sum:"Some things a tailor can change for very little. Others cannot be fixed at any price. Knowing which is which changes how you shop.",
+   why:"Off-the-rack sizing fits an average body that almost nobody has. The gap between looking fine and looking sharp is usually two or three centimetres in three places.",
+   steps:[
+     {b:"Check the shoulder seam first",p:"It should sit where your shoulder ends. This is the one thing a tailor cannot cheaply change — so it decides the size you buy."},
+     {b:"Then sleeve and hem length",p:"Shirt cuff at the wrist bone, trouser hem with a slight break or none. Both are quick, cheap alterations."},
+     {b:"Then the taper",p:"Sides of a shirt, legs of trousers. A good tailor takes in the excess without making anything tight."},
+     {b:"Know the limits",p:"Chest, rise and overall length on a jacket are expensive or impossible. If those are wrong, put it back."},
+     {b:"Build a relationship",p:"Bring three things at once. Ask what they would change. Most tailors will tell you honestly when something is not worth the work."}
+   ],
+   miss:["Buying a size up for comfort and living in clothes that read as borrowed.","Confusing slim with tight. If it pulls anywhere, it is too small.","Skipping alterations on the things you wear weekly and paying for them on the suit you wear twice a year."],
+   note:"If a tailor is not accessible to you, learn to hem trousers and take in a side seam. Both are an evening on a borrowed machine."},
+
+  {id:"g10",cat:"Fitness",icon:"dumbbell",title:"Training for how you look and how you feel",level:"Beginner",time:"3 hours a week",horizon:"12–16 weeks",ev:"Strong",
+   sum:"Three sessions a week, a handful of compound movements, adding a little over time. It is unglamorous and it works better than anything else on this site.",
+   why:"Building the upper back, shoulders and legs changes your silhouette in a way that clothes, posture and photographs all amplify. It also does more for mood and sleep than most people expect going in.",
+   steps:[
+     {b:"Three full-body sessions a week",p:"A push, a pull, a squat or hinge, and something for the core, every session. Far more effective for a beginner than a six-day split."},
+     {b:"Add a little, often",p:"A slightly heavier weight or one more rep than last time. Progress is the mechanism — the exercise selection matters much less than people argue."},
+     {b:"Prioritise the upper back and shoulders",p:"Rows, pull-downs, lateral raises. This is what actually changes how a shirt sits on you."},
+     {b:"Eat enough to support it",p:"Protein at each meal, enough total food that you have energy to train and recover. Undereating is the most common reason a beginner sees no change in twelve weeks."},
+     {b:"Sleep like it is part of the programme",p:"It is. Training hard on six hours a night is paying full price for half the result."},
+     {b:"Judge it at week twelve",p:"Take one set of photos at the start, then leave the camera alone. Day-to-day changes are water, light and angle."}
+   ],
+   miss:["Aggressive crash cuts. They cost you muscle, sleep and mood, and the result rebounds.","Programme-hopping every three weeks before anything has had time to work.","Training every day and recovering none of it."],
+   note:"If food or your body has become a source of real anxiety — counting obsessively, skipping meals, feeling that you have to earn eating — please speak to a doctor. That pattern is common, it is treatable, and it is not something to push through alone."},
+
+  {id:"g11",cat:"Posture",icon:"spine",title:"Posture, without the gimmicks",level:"Beginner",time:"10 min a day",horizon:"6–10 weeks",ev:"Mixed",
+   sum:"There is no single correct posture to hold all day. There is a body strong enough to sit and stand in a range of positions without collapsing into one.",
+   why:"Most of what people call bad posture is a mix of weak upper-back and hip musculature, a desk set at the wrong height, and staying in one position for eight hours. Braces address none of those.",
+   steps:[
+     {b:"Fix the desk before the body",p:"Screen top at roughly eye level, elbows near ninety degrees, feet flat. Most laptop setups quietly force the exact position people complain about."},
+     {b:"Move every half hour",p:"Stand, walk, change position. Variety beats any single perfect posture — the best position is the next one."},
+     {b:"Strengthen the upper back",p:"Rows, face pulls, carries. Strength holds a position; willpower does not."},
+     {b:"Open the front",p:"Chest and hip flexor stretches, a couple of minutes, most days. Short and frequent beats long and occasional."},
+     {b:"Use one cue, not ten",p:"Think of the crown of your head lifting. That single cue does more than a checklist of shoulder and pelvis corrections you cannot hold anyway."}
+   ],
+   miss:["Posture braces. They do the work your muscles should be doing and the effect disappears with the strap.","Yanking the head back into an exaggerated position and calling it alignment.","Expecting a decade of desk habits to change in a fortnight."],
+   note:"Pain, numbness or tingling is a physiotherapist conversation, not a routine you found online."},
+
+  {id:"g12",cat:"Wellbeing",icon:"moon",title:"Sleep: the one that multiplies everything else",level:"Beginner",time:"Free",horizon:"2–4 weeks",ev:"Strong",
+   sum:"Skin repair, training recovery, mood, appetite regulation and the actual look of your face all run through sleep. It is the cheapest lever available and the most neglected.",
+   why:"Short sleep raises stress hormones, disrupts appetite signalling and impairs recovery. The visible result — dull skin, puffiness, a flat face — is the part people try to fix with products.",
+   steps:[
+     {b:"Fix the wake time first",p:"Same time daily, including weekends. Wake time anchors the whole rhythm far more reliably than bedtime does."},
+     {b:"Get light early",p:"Ten to twenty minutes outside within an hour of waking. This is the strongest available signal for setting your clock."},
+     {b:"Cut caffeine by early afternoon",p:"It has a long half-life. The coffee at four is still in your system at ten, whether or not you feel it."},
+     {b:"Make the room dark, cool and boring",p:"Cooler than feels intuitive. Blackout if you can. Phone charging in another room removes the decision entirely."},
+     {b:"Give it two weeks",p:"Sleep debt does not clear in a night, and the first few days of a new schedule usually feel worse before they feel better."}
+   ],
+   miss:["Chasing a perfect score on a sleep tracker until the anxiety itself keeps you awake.","Lying in bed awake for an hour. Get up, do something dull in low light, go back when sleepy.","Alcohol as a sleep aid. It shortens the time to fall asleep and wrecks the quality of what follows."],
+   note:"Loud snoring, gasping, or exhaustion despite eight hours in bed is worth raising with a doctor. Sleep apnoea is common and very treatable."},
+
+  {id:"g13",cat:"Presence",icon:"mic",title:"Voice, presence and body language",level:"Intermediate",time:"Practice",horizon:"4–8 weeks",ev:"Mixed",
+   sum:"How you occupy a room is learnable, and it affects first impressions more than most of the physical stuff people obsess over.",
+   why:"People read confidence from pace, stillness and eye contact long before they analyse a face. These are trainable behaviours, not personality traits you were issued at birth.",
+   steps:[
+     {b:"Slow down and breathe lower",p:"Nervous speech is fast and shallow. Breathing from the diaphragm drops your pitch slightly and steadies the pace on its own."},
+     {b:"Use pauses on purpose",p:"A full second before answering reads as considered. Filling every gap reads as anxious. This is the single fastest change available."},
+     {b:"Be still",p:"Fidgeting, rocking and constant repositioning leak nervousness. Plant your feet, let your hands rest, and let gestures be deliberate."},
+     {b:"Meet eyes, do not stare",p:"Roughly half the time while speaking, more while listening, with natural breaks. Looking away to think is normal and reads as honest."},
+     {b:"Listen visibly",p:"Ask a second question about what someone just said. People consistently rate good listeners as more charismatic than good talkers."}
+   ],
+   miss:["Rehearsing a persona. People detect performance quickly and it costs more than it earns.","Confusing volume with presence.","Practising only in your head. Record thirty seconds of yourself talking — it is uncomfortable and it is the fastest feedback there is."],
+   note:"If social situations cause real dread rather than ordinary nerves, that is a well-understood thing that therapists treat successfully. Worth asking about."},
+
+  {id:"g14",cat:"Mindset",icon:"brain",title:"Improving your appearance without hating yourself",level:"Everyone",time:"Ongoing",horizon:"Ongoing",ev:"Supported",
+   sum:"The same routine can come from curiosity or from self-disgust. The behaviour looks identical from outside. The outcome is not.",
+   why:"Appearance-focused effort driven by shame tends to escalate — each fix reveals the next flaw — while effort driven by interest tends to stabilise into maintenance. The difference shows up in how you feel on the days you skip.",
+   steps:[
+     {b:"Notice what you are feeding",p:"If your feed is wall-to-wall comparison, it is not neutral input. Mute aggressively. This is the highest-impact change on this page."},
+     {b:"Distrust the camera",p:"Front-facing lenses distort features, and lighting changes a face more than any product does. A bad selfie is information about a lens."},
+     {b:"Judge on behaviour, not outcome",p:"Did you do the routine this week? That is the scoreboard. Bone structure is not a performance metric."},
+     {b:"Have a rule for bad days",p:"Do the two-minute version and leave it there. Skipping entirely turns into a week; the shortened version keeps the habit alive."},
+     {b:"Watch the escalation",p:"If the list of things you would need to fix keeps growing regardless of progress, that pattern is worth naming — and worth taking to a professional."}
+   ],
+   miss:["Rating scales and ranking threads. They measure agreement between strangers, not your life.","Using a future appearance as the precondition for living now.","Mistaking constant self-criticism for high standards."],
+   note:"Body dysmorphic disorder is genuinely common among people deep in this hobby, and it responds well to treatment. If a lot of this page sounded personal, that is worth a conversation with a doctor or therapist."}
+];
+
+const ROUTINES = {
+  am:[
+    {t:"0:00",b:"Rinse or gentle cleanse",p:"Water alone is fine if you cleansed last night and you are not oily. If you are, a low-foam cleanser."},
+    {t:"0:30",b:"Moisturiser",p:"On damp skin. Lighter formula in the morning so sunscreen sits well on top."},
+    {t:"1:00",b:"Sunscreen",p:"Two fingers' worth, face and neck, out to the hairline and ears. The non-negotiable step."},
+    {t:"2:00",b:"Teeth",p:"Two minutes, soft brush, and do not rinse the toothpaste away immediately — leaving the fluoride in contact does more work."},
+    {t:"4:00",b:"Hair",p:"Style damp, not soaking. Matte product for a natural finish, a small amount warmed between the palms first."},
+    {t:"5:00",b:"Deodorant and clothes",p:"Antiperspirant works better applied to dry skin. Check the outfit in daylight, not bathroom light."},
+    {t:"6:00",b:"Daylight",p:"Ten minutes outside if you can manage it.",opt:"optional"}
+  ],
+  pm:[
+    {t:"0:00",b:"Cleanse properly",p:"This is the important one — sunscreen, sweat and the day come off here. Thirty seconds, lukewarm."},
+    {t:"1:00",b:"Active, if you use one",p:"Retinoid or exfoliant, on dry skin, pea-sized for the whole face. Only on the nights your routine calls for it.",opt:"as scheduled"},
+    {t:"1:30",b:"Moisturiser",p:"Slightly richer than the morning one. Apply within a minute of drying off."},
+    {t:"3:00",b:"Teeth and floss",p:"Floss first, then brush. If flossing never sticks, interdental brushes are easier and work just as well."},
+    {t:"4:00",b:"Body",p:"Moisturiser on elbows, hands, anywhere that gets dry. Lip balm."},
+    {t:"5:00",b:"Set tomorrow up",p:"Clothes out, bag packed, phone charging outside the bedroom."},
+    {t:"8:00",b:"Lights down",p:"Dim the room for the last half hour. The goal is boredom, not stimulation."}
+  ],
+  wk:[
+    {t:"Sun",b:"Exfoliate",p:"Chemical exfoliant, once or twice a week maximum. More is not faster.",opt:"1–2×"},
+    {t:"Sun",b:"Nails and hands",p:"Cut, file, cuticles pushed back. Five minutes."},
+    {t:"Sun",b:"Brows, ears, nose",p:"Strays only. Keep the natural shape."},
+    {t:"Sun",b:"Shoes and laundry",p:"Clean the pair you wear most. Wash what needs it. Both take ten minutes and get noticed."},
+    {t:"Any",b:"Sheets and pillowcases",p:"Weekly. If you are treating acne, this one is not cosmetic advice — it matters."}
+  ],
+  mo:[
+    {t:"Wk 1",b:"Haircut",p:"Every four to six weeks. Book the next one as you leave."},
+    {t:"Wk 2",b:"Restock before you run out",p:"Running out of sunscreen is the most common reason people stop using sunscreen."},
+    {t:"Wk 3",b:"Progress check",p:"One set of photos, same light, same time of day, same angle. Then close the folder for another month."},
+    {t:"Wk 4",b:"Wardrobe pass",p:"Anything stained, bobbled or unworn for three months goes. Anything nearly-right goes to the tailor."},
+    {t:"Qtr",b:"Toothbrush head",p:"Every three months, or sooner if the bristles have splayed."},
+    {t:"Yr",b:"Dentist and a general check-up",p:"Both outrank every product on this site and both are easy to postpone indefinitely."}
+  ]
+};
+
+const GROOM = [
+  {icon:"drop",cls:"",t:"Body and odour",d:"Wash daily, dry thoroughly — odour is bacteria plus moisture, not dirt. Antiperspirant goes on dry skin at night as well as the morning; it works better than most people realise. If sweating is genuinely disruptive, a doctor has stronger options."},
+  {icon:"sun",cls:"jade",t:"Teeth",d:"Whitening strips have modest, real effects on surface stain. Charcoal powders are abrasive and do damage. Straightness, gum health and a hygienist appointment do far more than any product, and a dentist will tell you in ten minutes which of those applies to you."},
+  {icon:"scissors",cls:"",t:"Eyebrows",d:"Remove the obvious strays between and under the brow. Do not thin, do not create a new shape, and never use wax on skin you are treating with a retinoid — it will take the top layer with it."},
+  {icon:"drop",cls:"violet",t:"Fragrance",d:"One versatile scent applied to two or three points, close range. If people can smell you before you arrive, it is too much. Buy samples before bottles — skin chemistry makes reviews close to useless."},
+  {icon:"moon",cls:"jade",t:"Hands and nails",d:"Cut straight across, file the corners, moisturise after washing. Hands age faster than faces because they are washed twelve times a day and almost never protected with sunscreen."}
+];
+
+const BUY = [
+  {b:"Sunscreen, SPF 30+ broad spectrum",p:"The one with the largest measurable effect. Buy a texture you will actually reapply."},
+  {b:"A gentle cleanser",p:"Low-foam, no fragrance if your skin is reactive. One bottle lasts months."},
+  {b:"A moisturiser",p:"Gel-cream for oily skin, cream for dry. Cheap versions work."},
+  {b:"A rotary trimmer",p:"For ears, nose and the hairline at the back of the neck. Pays for itself against touch-ups between haircuts."},
+  {b:"One active, later",p:"Only once the first three are automatic. Adapalene or a low-strength exfoliant, not both."}
+];
+
+const AES = [
+  {n:"Quiet minimal",c:["#1B1B1F","#3E3E45","#8D8C93","#D8D5CE"],d:"Clean lines, no logos, tonal layering. Reads considered without announcing itself.",
+   keys:[["Core","Crew knit, straight trouser, plain tee"],["Shoes","Minimal leather sneaker or derby"],["Suits","Offices, cities, anyone who wants to stop thinking"],["Avoid","Busy prints, anything with visible branding"]]},
+  {n:"Classic tailored",c:["#1F2430","#3A4459","#7B6A52","#E4DDCF"],d:"Structured shoulders, natural fibres, muted colour. Traditional, and effective precisely because it is.",
+   keys:[["Core","Oxford shirt, chinos, unstructured blazer"],["Shoes","Loafers, leather boots"],["Suits","Formal workplaces, older crowds, events"],["Avoid","Poor fit — this one lives or dies on tailoring"]]},
+  {n:"Street",c:["#141416","#2E2E33","#5A5F6B","#C7502F"],d:"Relaxed proportions, deliberate footwear, a considered graphic. More technical than it looks.",
+   keys:[["Core","Boxy tee, wide or tapered denim, overshirt"],["Shoes","The anchor of the whole outfit"],["Suits","Younger scenes, creative work, weekends"],["Avoid","Wearing every trend at once"]]},
+  {n:"Rugged outdoor",c:["#232A22","#3F4A38","#6E6250","#CFC4AC"],d:"Earth tones, hard-wearing fabric, function that happens to look good. Ages well, literally.",
+   keys:[["Core","Flannel, waxed or shell jacket, sturdy trouser"],["Shoes","Boots, worn in"],["Suits","Cold climates, practical lives"],["Avoid","Full head-to-toe technical kit in a city"]]},
+  {n:"Smart casual",c:["#1A1D22","#39424D","#8A8578","#DCD6C8"],d:"The most useful register there is — the one that works for dinner, an office and meeting someone's parents.",
+   keys:[["Core","Polo or fine knit, dark denim or chino, overshirt"],["Shoes","Clean low-profile leather"],["Suits","Almost everything, which is the point"],["Avoid","Mixing formal shoes with athletic clothing"]]},
+  {n:"Modern technical",c:["#101215","#22272E","#414A55","#7E8B99"],d:"Muted palette, precise cuts, performance fabrics. Sharp when it is restrained, costume when it is not.",
+   keys:[["Core","Technical shell, tapered trouser, fine merino"],["Shoes","Low-profile technical sneaker"],["Suits","Commuting, wet climates, minimal packing"],["Avoid","Straps and pockets you never use"]]}
+];
+
+const FIT = [
+  {b:"Shoulder seams sit where your shoulder ends",s:"Not on the upper arm, not on the collarbone. This decides the size you buy."},
+  {b:"Sleeve ends at the wrist bone",s:"Shirt cuff at the base of the thumb joint; a jacket shows a little shirt beyond it."},
+  {b:"No pulling across chest or back",s:"Horizontal creases radiating from a button mean it is too small, not that you are too big."},
+  {b:"Trousers sit without a belt doing the work",s:"A belt should be a detail, not structural engineering."},
+  {b:"Hem breaks once, or not at all",s:"Pooled fabric over the shoe shortens your leg line more than any length of trouser ever could."},
+  {b:"You can sit down comfortably",s:"If an outfit only works standing up, it does not work."},
+  {b:"Collar takes two fingers",s:"Any tighter and it shows in every photo of you."},
+  {b:"Nothing is stained, bobbled or greying",s:"The least glamorous item on the list and the one that costs people the most."}
+];
+
+const CAPSULE = [["×2","Plain tees — one white, one dark"],["×1","Oxford shirt in white or pale blue"],["×2","Fine knit or crew sweater"],["×1","Overshirt or chore jacket"],["×1","Outer jacket suited to your climate"],["×2","Trousers — one dark denim, one chino"],["×1","Something one step smarter"],["×1","Clean minimal sneaker"],["×1","Leather boot or loafer"],["×1","Belt that matches the shoes"]];
+
+const THREADS = [
+  {id:"t1",cat:"Skin",title:"Three months of a four-step routine — here is what actually changed",who:"marcus_v",col:"#D2A45E",time:"2 days ago",v:412,r:87,
+   body:"Cleanser, moisturiser, sunscreen, adapalene three nights a week. No change at all until about week nine, then texture on my cheeks improved noticeably. The thing nobody told me: the first six weeks look worse and that is normal.",
+   top:{who:"halfstep",col:"#7FB09A",best:true,text:"Same timeline here, almost to the week. The guide on this site says twelve weeks before judging a retinoid and I wish I had believed it — I quit twice before that because the early irritation convinced me it was not working."}},
+  {id:"t2",cat:"Training",title:"Is there a point where lifting stops changing how you look in clothes?",who:"ollie.t",col:"#9A8FC4",time:"4 days ago",v:268,r:54,
+   body:"Eight months in, novice gains clearly over. Still progressing on the bar but the visual change has slowed a lot. Wondering whether to keep chasing it or redirect the effort.",
+   top:{who:"framework_",col:"#D2A45E",best:false,text:"For me the silhouette change kept coming from upper back and shoulder width, it just got much slower after the first year. When the visual return flattened I got three things tailored instead, and that did more in a week than the previous two months of training did."}},
+  {id:"t3",cat:"Hair",title:"Noticed thinning at the temples at 23 — what did you do first?",who:"quietriver",col:"#DC7F6E",time:"6 days ago",v:534,r:139,
+   body:"Not dramatic yet but the part looks wider in photos than it did last year. Trying not to spiral about it. Mostly want to know what people wish they had done in the first year.",
+   top:{who:"ben_ishida",col:"#7FB09A",best:true,text:"Book a doctor before you buy anything — that is the one I wish someone had said to me. I spent a year on shampoos and oils first. Several reversible causes apparently look identical to pattern loss in early photos, and nobody on a forum can tell you which one you have."}},
+  {id:"t4",cat:"Style",title:"Spent 40 on tailoring instead of a new jacket and it was not close",who:"ben_ishida",col:"#7FB09A",time:"1 week ago",v:389,r:61,
+   body:"Took three things I already owned to a tailor. Sleeves shortened, one shirt taken in at the sides, trousers hemmed. They look like different garments. I had been about to spend ten times that on replacing them.",
+   top:{who:"marcus_v",col:"#D2A45E",best:false,text:"This is the advice that takes longest to land because it is unexciting. The shoulder seam is the only thing you cannot fix cheaply — everything below it is negotiable."}},
+  {id:"t5",cat:"Mindset",title:"How do you tell the difference between self-improvement and obsession?",who:"anon_4417",col:"#9A8FC4",time:"1 week ago",v:721,r:203,
+   body:"Started with a skincare routine last year. Now I check my face in every reflective surface and I have started avoiding photos. The routine helped. Whatever this is has not.",
+   top:{who:"halfstep",col:"#7FB09A",best:true,text:"The line for me was whether it cost time and gave back confidence, or took both. Mirror checking and avoiding photos were exactly where I was two years ago. I took it to a therapist, which felt dramatic at the time and was the single thing that helped most. Please consider it — you are describing something people get treated for all the time."}},
+  {id:"t6",cat:"Skin",title:"Sunscreen recommendations that do not leave a white cast",who:"tobi_a",col:"#D2A45E",time:"1 week ago",v:301,r:96,
+   body:"Every mineral one I have tried is grey on me. Looking for what has worked for people with deeper skin tones rather than another list of the same three products.",
+   top:{who:"sena.k",col:"#9A8FC4",best:false,text:"Chemical or hybrid fluids solved this for me entirely — the newer lightweight formulas are a different category from the mineral creams. Tinted mineral options are the other route if you prefer them. Worth buying travel sizes before committing to a bottle."}},
+  {id:"t7",cat:"Wins",title:"Year one: no transformation photo, but I sleep eight hours and I like going outside",who:"halfstep",col:"#7FB09A",time:"2 weeks ago",v:658,r:112,
+   body:"I came here for a jawline. What I got was a sleep schedule, a training habit, four shirts that fit, and a noticeably better mood. The face stuff barely changed. I do not mind as much as I expected to.",
+   top:{who:"ollie.t",col:"#9A8FC4",best:false,text:"This is the outcome nobody posts about and it is the most common good one. The physical changes are slow and partial; the second-order effects arrive much faster."}},
+  {id:"t8",cat:"Training",title:"Eating enough was the missing piece, not training harder",who:"sena.k",col:"#9A8FC4",time:"2 weeks ago",v:294,r:73,
+   body:"Six months of three sessions a week and almost nothing to show for it. Turned out I was undereating badly. Ate properly for eight weeks with the same programme and the difference was obvious.",
+   top:{who:"framework_",col:"#D2A45E",best:true,text:"Extremely common from what I have seen here. Training is the stimulus, food and sleep are what lets you adapt to it. If nothing has changed in three months, look at those two before rewriting the programme."}},
+  {id:"t9",cat:"Style",title:"What is the single item that upgraded your outfits most?",who:"ben_ishida",col:"#7FB09A",time:"3 weeks ago",v:187,r:141,
+   body:"Curious what people actually reach for rather than what looks good in a lookbook. For me it was one well-cut overshirt that goes over almost everything.",
+   top:{who:"halfstep",col:"#7FB09A",best:false,text:"Shoes. I replaced one tired pair with something clean and simple and it lifted every outfit I already owned. Nothing else had that ratio."}}
+];
+
+const RULES = [
+  {b:"No rating requests, no scales",p:"No PSL numbers, no ranking faces. Threads asking for them get closed, kindly, every time."},
+  {b:"Say what you tried and for how long",p:"Vague questions get vague answers. Specifics get you the good replies."},
+  {b:"Label your evidence",p:"Personal experience, something you read, or something a clinician told you. All three are welcome; conflating them is not."},
+  {b:"Nothing that belongs in a clinic",p:"No dosing advice, no grey-market sourcing, no DIY procedures. Signposting people to a professional is always allowed."},
+  {b:"Assume the person is younger than you",p:"A good share of this community is under twenty. Write as though they are reading, because they are."}
+];
+
+const CONTEXT = [
+  {t:"Where the word came from",d:"Looksmaxxing began in male-dominated online forums and moved into the mainstream after trending on TikTok in the early 2020s. Coverage since has focused mostly on the culture around it rather than on the wellbeing of the people taking part.",
+   src:"Michigan Medicine Health Lab",url:"https://www.michiganmedicine.org/health-lab/looksmaxxing-isnt-just-tiktok-trend-it-often-reflects-severe-body-image-issues-boys-and-young-men"},
+  {t:"Teen spending, 2024",d:"Piper Sandler's spring 2024 Taking Stock With Teens survey put teen spending on beauty at its highest level since 2018 — up 8% year over year to $339 per person annually, with skincare notably up among teen boys.",
+   src:"SheKnows, reporting the survey",url:"https://www.sheknows.com/parenting/videos/3085856/teen-boys-personal-care-trends-looksmaxxing-skincare-routines/"},
+  {t:"What clinicians are seeing",d:"Adolescent medicine specialists have publicly linked the trend's more extreme end — restrictive dieting, unregulated supplements, striking the face — to emergency presentations, and note eating disorders in boys and young men are more common than generally assumed.",
+   src:"Mass General Brigham, via ABC10",url:"https://www.abc10.com/article/news/nation-world/looksmaxxing-what-parents-need-to-know-about-the-viral-trend-targeting-teen-boys/507-38dbd425-f474-43f1-9fe5-ba213ef6f66f"},
+  {t:"The commercial side",d:"Fortune reported in July 2024 on the industry built around the trend, from rating apps to influencer product lines, and on how much of it runs on the insecurity of very young audiences.",
+   src:"Fortune, 1 July 2024",url:"https://www.fortune.com/2024/07/01/looksmaxxing-apps-rate-teen-boys-faces-mental-health"}
+];
+
+const HABITS = [
+  {id:"h1",n:"Sunscreen",s:"Every morning"},
+  {id:"h2",n:"Seven to nine hours of sleep",s:"Same wake time"},
+  {id:"h3",n:"Evening cleanse and moisturise",s:"Two minutes"},
+  {id:"h4",n:"Train",s:"Three sessions a week"},
+  {id:"h5",n:"Eat properly across the day",s:"Protein at each meal"},
+  {id:"h6",n:"Walk outside in daylight",s:"Ten minutes is enough"},
+  {id:"h7",n:"Posture and mobility break",s:"Once at your desk"}
+];
+
+const GOALS = [
+  {t:"Run the skin routine 80% of days",p:0,c:"",note:"Missing one day in five is still a success"},
+  {t:"Twelve weeks of three sessions a week",p:0,c:"j",note:"36 sessions, whenever they happen"},
+  {t:"Consistent wake time, six days a week",p:0,c:"v",note:"Weekends included, within an hour"},
+  {t:"Take four wardrobe items to a tailor",p:0,c:"",note:"One visit, not four"}
+];
+
+const TERMS = [
+  {t:"Looksmaxxing",g:"Basics",ev:"Mixed",mean:"An umbrella term for deliberately working on your appearance — skin, hair, fitness, style, grooming, and sometimes procedures.",
+   real:"The word covers everything from washing your face to things that genuinely hurt people. The useful distinction is not whether you are doing it, but which end of that range you are at, and whether the effort is making your life bigger or smaller."},
+  {t:"Softmaxxing and hardmaxxing",g:"Basics",ev:"Mixed",mean:"Softmaxxing means reversible, low-risk work: skin, hair, training, style. Hardmaxxing means permanent intervention — surgery, and in the extreme, bone-lengthening procedures.",
+   real:"Softmaxxing is where essentially all of the good return-per-risk lives, and almost nobody exhausts it before looking further. If you have not had consistent sleep, training and a skin routine for a year, you have not reached the limits of the easy stuff."},
+  {t:"Mewing",g:"Face",ev:"Unsupported",mean:"Resting the tongue against the roof of the mouth, claimed to reshape the jaw and cheekbones in adults.",
+   real:"There is no good evidence that tongue posture remodels adult facial bone. Nasal breathing and a closed mouth posture are genuinely good for you for other reasons, and if a teenager has an orthodontic issue, an orthodontist can assess it properly. Straining the jaw for hours is a way to get jaw pain, not cheekbones."},
+  {t:"Bone smashing",g:"Face",ev:"Harmful",mean:"Deliberately striking your own face, supposedly to trigger bone to regrow denser and more angular.",
+   real:"This is self-injury with a nickname. The idea is a misreading of how bone responds to controlled loading; facial trauma produces fractures, nerve damage, asymmetry and sinus injury. There is no version of this that is safe and no threshold at which it starts working. If you have been considering it, please talk to someone."},
+  {t:"The PSL scale",g:"Culture",ev:"Unsupported",mean:"A one-to-ten rating system for faces, used across appearance forums as though it were objective.",
+   real:"It measures how much a particular online subculture agrees with itself. Attractiveness ratings vary widely between raters, cultures and contexts, and people who rate themselves against these scales reliably rate themselves lower than strangers do. There is no version of this number that improves your life, which is why this site does not use it."},
+  {t:"Mogging",g:"Culture",ev:"Unsupported",mean:"Being visibly outshone by someone standing next to you.",
+   real:"The concept is a joke that stopped being one. Treating every social situation as a ranking exercise is a reliable way to enjoy none of them, and it is one of the clearer signs that appearance focus has tipped into something worth addressing."},
+  {t:"The halo effect",g:"Culture",ev:"Supported",mean:"The tendency for one positive trait to colour judgements about unrelated ones.",
+   real:"This is a real, well-replicated finding in psychology — and it is routinely overstated online into a theory that appearance determines everything. In practice it is one modest factor among many, its effect shrinks fast as people get to know you, and things like warmth, competence and how you carry yourself carry substantial weight of their own."},
+  {t:"Canthal tilt",g:"Face",ev:"Mixed",mean:"The angle between the inner and outer corners of the eye, treated online as a critical marker.",
+   real:"It is a real anatomical measurement used in clinical settings. It is also almost entirely fixed, unmeasurable from a phone camera at the angles people use, and heavily distorted by lens and expression. Time spent measuring it in selfies has a return of precisely zero."},
+  {t:"Frame",g:"Body",ev:"Supported",mean:"Skeletal proportions — shoulder width, clavicle length, wrist and ankle size.",
+   real:"Your skeleton is fixed, but the muscle on it is not, and that is what people actually read as frame. Building the upper back, shoulders and lats measurably changes silhouette. This is one of the few areas where the community's focus is pointed at something that genuinely responds to work."},
+  {t:"Skinmaxxing",g:"Basics",ev:"Supported",mean:"Focused effort on skin quality — routine, actives, sun protection, sometimes professional treatment.",
+   real:"The best-supported area in the whole hobby, and the one with the clearest ceiling on what is needed. Four products and sun protection get you most of the available result. The tenth product in a routine is doing close to nothing, and may be doing harm."},
+  {t:"Height talk and limb lengthening",g:"Body",ev:"Harmful",mean:"Discussion of height as decisive, and of surgical limb lengthening as a remedy.",
+   real:"Adult height is fixed. Limb lengthening is major orthopaedic surgery with a long, painful recovery and a real rate of serious complications — it exists for medical indications and is not a cosmetic decision to weigh up in a forum thread. Posture, fit and footwear change how tall you read; nothing else non-surgical does."},
+  {t:"Cosmetic procedures",g:"Basics",ev:"Mixed",mean:"Injectables, lasers, rhinoplasty and similar, usually discussed in terms of results rather than risk.",
+   real:"These are legitimate medical procedures that help some adults and harm others, and the deciding factors are the practitioner's credentials, a realistic expectation, and a stable reason for wanting it. What this community should never do is push them on people who are under eighteen, in distress, or being told their face is a problem to solve. A consultation with a qualified clinician is the only useful next step, and a good one will sometimes tell you no."}
+];
+
+const EVKEY = [
+  {t:"Strong",c:"j",d:"Consistent evidence from good-quality studies. Sunscreen and sleep sit here."},
+  {t:"Supported",c:"j",d:"Good evidence for a real effect, though the size of it varies between people."},
+  {t:"Mixed",c:"b",d:"Plausible mechanism, thin or conflicting evidence. Reasonable to try, not to build a life around."},
+  {t:"Harmful",c:"c",d:"Known to cause damage. We describe these so you can recognise them, not so you can try them."}
+];
+
+const FAQS = [
+  {q:"Is looksmaxxing just a repackaged word for insecurity?",a:"It can be either. Washing your face, lifting weights, sleeping properly and owning clothes that fit are ordinary adult maintenance, and calling them by a newer name does not change that. What matters is direction of travel: if the effort is adding to your life, it is a hobby. If your list of flaws grows faster than your progress does, the word is not the problem — the pattern is, and it is very treatable."},
+  {q:"Who writes this site, and who reviews it?",a:"Refine launched in 2026 and is written by the people running it. No dermatologist, doctor, coach or other professional has reviewed this content, and no verified professionals have joined the community yet. Everything here is general educational writing assembled from public guidance, and we have tried to say plainly where the evidence is thin. It is not a substitute for someone who can examine you."},
+  {q:"How long before I see anything?",a:"Roughly: a haircut and clothes, same day. Sleep and mood, two to four weeks. Skin, eight to twelve weeks. Visible training changes, three to six months. Almost everyone quits somewhere in the gap between the first two and the rest, which is why this site pushes habit tracking rather than photos."},
+  {q:"What actually has the most evidence behind it?",a:"Daily sunscreen, sleep, resistance training, and treating acne early enough to avoid scarring. That is the short list, and it accounts for most of the realistic gains available to most people. Everything else is refinement."},
+  {q:"Does mewing work?",a:"Not for reshaping adult facial bone — there is no good evidence for that claim. Nasal breathing and keeping your mouth closed at rest are worth doing for other reasons, and a genuine jaw or airway concern is something an orthodontist or doctor should assess. Straining your tongue against your palate for hours a day mainly produces jaw pain."},
+  {q:"I am sixteen. Is any of this appropriate for me?",a:"The basics, yes: sunscreen, a simple skin routine, sleep, sensible training with supervision, and clothes that fit. What is not appropriate at your age is any cosmetic procedure, any prescription sourced outside a doctor, or any restrictive diet. If a website or a person is pushing those at teenagers, that is a reason to leave, not to listen."},
+  {q:"Why is there no rating section on this site?",a:"Because rating systems measure how much strangers agree with each other, and reliably make the people who use them feel worse. There is also no version of a number between one and ten that tells you which habit to start tomorrow. We would rather answer that question."},
+  {q:"What about supplements?",a:"Correcting an actual deficiency helps — and a blood test is how you find out whether you have one. Beyond that, the evidence for appearance-focused supplements is mostly weak, the industry is lightly regulated, and money spent there is nearly always better spent on food, sleep or one dermatologist appointment."},
+  {q:"Should I take progress photos?",a:"Monthly at most, same light, same angle, same time of day, then close the folder. Daily photos measure lighting and water retention, not progress, and for a lot of people they become the beginning of a genuinely unpleasant relationship with the mirror."},
+  {q:"Is skincare for men actually different?",a:"No. Skin is skin. The only meaningful variables are skin type, sensitivity and how much sun you get. Products marketed by gender are the same formulas in different bottles, often priced differently."},
+  {q:"What is the cheapest thing with the biggest effect?",a:"Sleep, which is free. Then sunscreen, then a barber who suits you, then a tailor. You can get most of the available result for less than the cost of one heavily advertised serum."},
+  {q:"How do I stop comparing myself to people online?",a:"Mute rather than resolving to scroll less — willpower loses to an algorithm every time. It also helps to know that front-facing camera lenses distort features, that the lighting is chosen, and that a large share of what you are comparing yourself to has been edited. Judge your week on whether you did the routine, not on how your face photographed on Tuesday."},
+  {q:"When should I talk to a professional instead of a forum?",a:"Painful or scarring acne, hair loss you want to act on, any pain, anything you are considering a procedure for — and any point at which how you look is affecting how you eat, sleep, or whether you leave the house. A doctor can look at you. A forum can only look at your description of you."}
+];
+
+/* ============================================================
+   state + storage
+   ============================================================ */
+/* Categorias validas do quadro. Declaradas aqui porque loadState() as usa
+   para validar dados vindos do localStorage antes do bloco da comunidade. */
+const TCATS = ["All","Skin","Hair","Training","Style","Mindset","Wins"];
+
+const KEY = "refine.v1";
+
+/* Escape de saída. Toda string que chega perto de innerHTML passa por aqui.
+   O ponto de controle é a SAIDA, nao a entrada: guardamos o texto do usuario
+   exatamente como ele digitou e neutralizamos a sintaxe HTML na hora de
+   renderizar, entao nada que ele escreva vira marcacao ou script. */
+function esc(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/`/g,"&#96;");
+}
+/* Href so e aceito se for https absoluto: fecha javascript:, data: e vbscript:. */
+function safeUrl(u){
+  try{ const p = new URL(String(u), location.href); return p.protocol === "https:" ? p.href : "#"; }
+  catch(e){ return "#"; }
+}
+
+/* Limites. Existem para conter tanto abuso quanto acidente: sem eles o
+   localStorage estoura a cota e a aplicacao para de salvar em silencio. */
+const LIM = { habits:12, threads:50, title:120, body:600, journal:4000, name:42, days:400 };
+const txt = (v,max)=> typeof v === "string" ? v.slice(0,max) : "";
+const isId = v => typeof v === "string" && /^[A-Za-z0-9_-]{1,32}$/.test(v);
+/* Formato certo nao basta: 2026-13-99 casa com a regex e nao e uma data.
+   Exigimos que o valor sobreviva a um round-trip pelo calendario. */
+const isDay = v => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) &&
+  (function(){ const d = new Date(v + "T00:00:00Z");   /* ancorado em UTC: sem isso, fusos a leste de Greenwich veriam datas validas serem rejeitadas */
+    return !isNaN(d) && d.toISOString().slice(0,10) === v; })();
+
+function blank(){
+  return { log:Object.create(null), habits:HABITS.map(h=>({...h})),
+           journal:"", fit:[], votes:Object.create(null), mine:[] };
+}
+
+/* O conteudo do localStorage e entrada nao confiavel: o usuario (ou qualquer
+   script que um dia rode nesta origem) pode reescreve-lo a mao. Em vez de
+   Object.assign do JSON cru — que aceitaria __proto__ e poluiria o prototype —
+   copiamos campo a campo, com tipo e formato verificados. */
+function loadState(){
+  const out = blank();
+  let raw = null;
+  try{ raw = localStorage.getItem(KEY); }catch(e){ return out; }
+  if(!raw) return out;
+  let p;
+  try{ p = JSON.parse(raw); }catch(e){ return out; }
+  if(!p || typeof p !== "object" || Array.isArray(p)) return out;
+
+  if(Array.isArray(p.habits)){
+    const seen = Object.create(null), list = [];
+    for(const h of p.habits){
+      if(!h || typeof h !== "object" || !isId(h.id) || seen[h.id]) continue;
+      const n = txt(h.n, LIM.name).trim();
+      if(!n) continue;
+      seen[h.id] = 1; list.push({ id:h.id, n:n, s:txt(h.s, 60) });
+      if(list.length >= LIM.habits) break;
+    }
+    if(list.length) out.habits = list;
+  }
+  const ids = out.habits.map(h=>h.id);
+  if(p.log && typeof p.log === "object"){
+    for(const k of Object.keys(p.log)){
+      if(!isId(k) || ids.indexOf(k) < 0 || !Array.isArray(p.log[k])) continue;
+      out.log[k] = p.log[k].filter(isDay).slice(-LIM.days);
+    }
+  }
+  if(p.votes && typeof p.votes === "object"){
+    for(const k of Object.keys(p.votes)){ if(isId(k)) out.votes[k] = 1; }
+  }
+  if(Array.isArray(p.fit)){
+    out.fit = p.fit.filter(n=> Number.isInteger(n) && n >= 0 && n < 64).slice(0,64);
+  }
+  if(Array.isArray(p.mine)){
+    for(const t of p.mine){
+      if(!t || typeof t !== "object" || !isId(t.id)) continue;
+      const title = txt(t.title, LIM.title).trim(), body = txt(t.body, LIM.body).trim();
+      if(!title || !body) continue;
+      out.mine.push({ id:t.id, cat: TCATS.indexOf(t.cat) > 0 ? t.cat : "Skin",
+                      title:title, body:body, who:"you", col:"#D2A45E",
+                      time: txt(t.time, 24) || "earlier", v:1, r:0, top:null });
+      if(out.mine.length >= LIM.threads) break;
+    }
+  }
+  out.journal = txt(p.journal, LIM.journal);
+  return out;
+}
+let S = loadState();
+
+/* Uma escrita que estoura a cota falha em silencio e o usuario so descobre ao
+   perder dados. Aqui ela e reportada — sem expor detalhe interno nenhum. */
+let quotaWarned = false;
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); return true; }
+  catch(e){
+    if(!quotaWarned){ quotaWarned = true; try{ toast("Storage is full — older entries may not save"); }catch(_){} }
+    return false;
+  }
+}
+
+const $ = (s,r)=>(r||document).querySelector(s);
+const $$ = (s,r)=>Array.from((r||document).querySelectorAll(s));
+const dkey = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const addDays = (d,n)=>{ const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+const TODAY = new Date();
+function last7(){ const a=[]; for(let i=6;i>=0;i--) a.push(addDays(TODAY,-i)); return a; }
+function isDone(id,d){ return !!(S.log[id]&&S.log[id].indexOf(dkey(d))>-1); }
+function toggle(id,d){
+  const k=dkey(d); S.log[id]=S.log[id]||[];
+  const i=S.log[id].indexOf(k); if(i>-1) S.log[id].splice(i,1); else S.log[id].push(k);
+  save();
+}
+function streak(id){
+  let n=0, d=new Date(TODAY);
+  if(!isDone(id,d)) d=addDays(d,-1);
+  while(isDone(id,d)){ n++; d=addDays(d,-1); }
+  return n;
+}
+function todayPct(){
+  const done = S.habits.filter(h=>isDone(h.id,TODAY)).length;
+  return S.habits.length ? Math.round(done/S.habits.length*100) : 0;
+}
+function dayPct(d){
+  const done = S.habits.filter(h=>isDone(h.id,d)).length;
+  return S.habits.length ? done/S.habits.length : 0;
+}
+
+let toastT;
+function toast(msg){
+  const t=$("#toast"); $("#toastMsg").textContent=msg;
+  t.classList.add("show"); clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+/* ============================================================
+   render: home
+   ============================================================ */
+$("#pillars").innerHTML = PILLARS.map(p=>
+  '<div><span class="n">'+p.n+'</span><b>'+p.t+'</b><p class="body-s">'+p.d+'</p></div>').join("");
+
+$("#ticker").innerHTML = (TICKER.concat(TICKER)).map(t=>"<span>"+t+"</span>").join("");
+
+function guideCard(g){
+  return '<article class="card card-i" data-guide="'+g.id+'" tabindex="0" role="button">'+
+    '<div class="c-icon '+(g.ev==="Strong"||g.ev==="Supported"?"jade":g.cat==="Mindset"?"violet":"")+'">'+I[g.icon]+'</div>'+
+    '<div class="tag-row" style="margin-bottom:.7rem"><span class="tag">'+g.cat+'</span><span class="tag '+(g.ev==="Strong"||g.ev==="Supported"?"j":"b")+'">'+g.ev+'</span></div>'+
+    '<h3>'+g.title+'</h3>'+
+    '<p class="body-s">'+g.sum+'</p>'+
+    '<div class="meta" style="margin-top:1.1rem"><i>'+I.clock+g.time+'</i><i>'+I.gauge+g.level+'</i><i>'+I.cal+g.horizon+'</i></div>'+
+  '</article>';
+}
+$("#homeGuides").innerHTML = [GUIDES[2],GUIDES[8],GUIDES[10]].map(guideCard).join("");
+
+function threadCard(t){
+  const on = S.votes[t.id];
+  const col = /^#[0-9A-Fa-f]{6}$/.test(t.col) ? t.col : "#D2A45E";
+  const tcol = t.top && /^#[0-9A-Fa-f]{6}$/.test(t.top.col) ? t.top.col : "#D2A45E";
+  return '<article class="thread" data-thread="'+esc(t.id)+'">'+
+    '<div class="vote">'+
+      '<button class="'+(on?"on":"")+'" data-vote="'+esc(t.id)+'" aria-label="Upvote">'+I.up+'</button>'+
+      '<b class="'+(on?"on":"")+'">'+((Number(t.v)||0)+(on?1:0))+'</b>'+
+    '</div>'+
+    '<div>'+
+      '<div class="who"><span class="av" style="background:'+col+'">'+esc(String(t.who).slice(0,2).toUpperCase())+'</span>'+esc(t.who)+' <span style="opacity:.5">·</span> '+esc(t.time)+' <span class="tag" style="margin-left:.2rem">'+esc(t.cat)+'</span></div>'+
+      '<h3>'+esc(t.title)+'</h3>'+
+      '<p class="body-s">'+esc(t.body)+'</p>'+
+      (t.top?'<div class="reply"><div class="who"><span class="av" style="background:'+tcol+'">'+esc(String(t.top.who).slice(0,2).toUpperCase())+'</span>'+esc(t.top.who)+(t.top.best?' <span class="best">most useful</span>':'')+'</div>'+esc(t.top.text)+'</div>':'')+
+      '<div class="meta" style="margin-top:.9rem"><i>'+I.msg+(Number(t.r)||0)+' replies</i></div>'+
+    '</div>'+
+  '</article>';
+}
+$("#homeThreads").innerHTML = [THREADS[4],THREADS[0]].map(threadCard).join("");
+
+/* hero panel */
+function renderHero(){
+  const opts = {weekday:"long", day:"numeric", month:"long"};
+  $("#heroDate").textContent = TODAY.toLocaleDateString(undefined,opts);
+  const list = S.habits.slice(0,5);
+  $("#heroHabits").innerHTML = list.map(h=>{
+    const d=isDone(h.id,TODAY), st=streak(h.id);
+    return '<div class="habit-row '+(d?"done":"")+'" data-hero="'+esc(h.id)+'" role="button" tabindex="0">'+
+      '<span class="tick">'+I.check+'</span>'+
+      '<span class="habit-name">'+esc(h.n)+'</span>'+
+      (st>1?'<span class="habit-streak hot">'+I.flame+st+'</span>':'<span class="habit-streak">'+(d?"today":"")+'</span>')+
+    '</div>';
+  }).join("");
+  const pct = todayPct();
+  $("#heroPct").textContent = pct+"%";
+  $("#heroRing").style.strokeDashoffset = (138.2*(1-pct/100)).toFixed(1);
+  const names=["S","M","T","W","T","F","S"];
+  $("#heroWeek").innerHTML = last7().map((d,i)=>{
+    const p=dayPct(d), lvl = p===0?0 : p<.4?1 : p<.8?2 : 3;
+    return '<i class="f'+lvl+(i===6?" today":"")+'">'+names[d.getDay()]+'</i>';
+  }).join("");
+}
+renderHero();
+
+/* counters */
+function runCounters(){
+  $$("[data-count]").forEach(el=>{
+    if(el.dataset.done) return; el.dataset.done="1";
+    const target = +el.dataset.count, dur = 1500, t0 = performance.now();
+    (function step(t){
+      const p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,3);
+      el.textContent = Math.round(target*e).toLocaleString();
+      if(p<1) requestAnimationFrame(step);
+    })(t0);
+  });
+}
+
+/* ============================================================
+   render: guides
+   ============================================================ */
+const CATS = ["All"].concat(Array.from(new Set(GUIDES.map(g=>g.cat))));
+$("#guideFilters").innerHTML = CATS.map((c,i)=>'<button class="chip'+(i===0?" on":"")+'" data-gf="'+c+'">'+c+'</button>').join("");
+let gFilter="All", gQuery="";
+function renderGuides(){
+  const list = GUIDES.filter(g=>{
+    const okc = gFilter==="All" || g.cat===gFilter;
+    const q = gQuery.toLowerCase();
+    const okq = !q || (g.title+" "+g.sum+" "+g.cat+" "+g.why).toLowerCase().indexOf(q)>-1;
+    return okc && okq;
+  });
+  $("#guideGrid").innerHTML = list.map(guideCard).join("");
+  $("#guideEmpty").classList.toggle("hidden", list.length>0);
+}
+renderGuides();
+
+/* ============================================================
+   render: grooming
+   ============================================================ */
+function routine(arr){
+  return arr.map(s=>'<div class="rstep"><div class="t">'+s.t+'</div><div><b>'+s.b+(s.opt?'<span class="opt">'+s.opt+'</span>':'')+'</b><p>'+s.p+'</p></div></div>').join("");
+}
+$("#rAM").innerHTML = routine(ROUTINES.am);
+$("#rPM").innerHTML = routine(ROUTINES.pm);
+$("#rWK").innerHTML = routine(ROUTINES.wk);
+$("#rMO").innerHTML = routine(ROUTINES.mo);
+$("#groomCards").innerHTML = GROOM.map(g=>
+  '<article class="card"><div class="c-icon '+g.cls+'">'+I[g.icon]+'</div><h3>'+g.t+'</h3><p class="body-s">'+g.d+'</p></article>').join("");
+$("#buyOrder").innerHTML = BUY.map(b=>'<li><b>'+b.b+'</b><p>'+b.p+'</p></li>').join("");
+
+/* ============================================================
+   render: style
+   ============================================================ */
+$("#aesGrid").innerHTML = AES.map(a=>
+  '<article class="aes"><div class="aes-sw">'+a.c.map(c=>'<i style="background:'+c+'"></i>').join("")+'</div>'+
+  '<div class="aes-b"><h3>'+a.n+'</h3><p class="body-s">'+a.d+'</p>'+
+  '<ul class="aes-list">'+a.keys.map(k=>'<li><b>'+k[0]+'</b><span>'+k[1]+'</span></li>').join("")+'</ul></div></article>').join("");
+
+$("#fitCheck").innerHTML = FIT.map((f,i)=>
+  '<label><input type="checkbox" data-fit="'+i+'"'+(S.fit.indexOf(i)>-1?" checked":"")+'><span class="box">'+I.check+'</span>'+
+  '<span class="txt"><b>'+f.b+'</b><span>'+f.s+'</span></span></label>').join("");
+
+$("#capsule").innerHTML = CAPSULE.map(c=>'<li><b>'+c[0]+'</b><span>'+c[1]+'</span></li>').join("");
+
+/* ============================================================
+   render: community
+   ============================================================ */
+$("#threadFilters").innerHTML = TCATS.map((c,i)=>'<button class="chip'+(i===0?" on":"")+'" data-tf="'+c+'">'+c+'</button>').join("");
+let tFilter="All";
+function allThreads(){ return S.mine.concat(THREADS); }
+function renderThreads(){
+  const list = allThreads().filter(t=>tFilter==="All"||t.cat===tFilter);
+  $("#threadList").innerHTML = list.map(threadCard).join("");
+  $("#threadEmpty").classList.toggle("hidden", list.length>0);
+}
+renderThreads();
+$("#rules").innerHTML = RULES.map(r=>'<li><b>'+r.b+'</b><p>'+r.p+'</p></li>').join("");
+$("#contextGrid").innerHTML = CONTEXT.map(c=>
+  '<article class="card"><h3>'+c.t+'</h3><p class="body-s" style="margin-top:.5rem">'+c.d+'</p>'+
+  '<div style="margin-top:1.1rem"><a class="tag b" href="'+esc(safeUrl(c.url))+'" target="_blank" rel="noopener noreferrer">'+esc(c.src)+'</a></div></article>').join("");
+
+/* ============================================================
+   render: progress
+   ============================================================ */
+const DN=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+function renderTracker(){
+  const days = last7();
+  $("#weekRange").textContent = days[0].toLocaleDateString(undefined,{day:"numeric",month:"short"})+" – "+days[6].toLocaleDateString(undefined,{day:"numeric",month:"short"});
+  $("#trackList").innerHTML = S.habits.map(h=>{
+    const st=streak(h.id);
+    return '<div class="track-grid"><div class="track-name"><div style="min-width:0"><b>'+esc(h.n)+'</b><span>'+esc(h.s||"")+(st>1?" · "+st+" day streak":"")+'</span></div></div>'+
+      '<div class="dots">'+days.map((d,i)=>
+        '<button class="dot '+(isDone(h.id,d)?"on":"")+(i===6?" today":"")+'" data-tk="'+esc(h.id)+'" data-di="'+i+'" aria-label="'+DN[(d.getDay()+6)%7]+'">'+DN[(d.getDay()+6)%7].slice(0,1)+'</button>').join("")+'</div></div>';
+  }).join("");
+
+  const done7 = days.reduce((a,d)=>a+S.habits.filter(h=>isDone(h.id,d)).length,0);
+  const poss7 = days.length*S.habits.length;
+  const best = S.habits.reduce((m,h)=>Math.max(m,streak(h.id)),0);
+  const totalDone = Object.keys(S.log).reduce((a,k)=>a+S.log[k].length,0);
+  $("#statRow").innerHTML = [
+    ["Today", todayPct()+"%", S.habits.filter(h=>isDone(h.id,TODAY)).length+" of "+S.habits.length+" done"],
+    ["This week", (poss7?Math.round(done7/poss7*100):0)+"%", done7+" check-ins"],
+    ["Longest streak", best+(best===1?" day":" days"), best>2?"Keep it going":"Streaks start at one"],
+    ["All time", totalDone, "habits completed"]
+  ].map(s=>'<div class="stat"><span>'+s[0]+'</span><b>'+s[1]+'</b><span class="delta">'+s[2]+'</span></div>').join("");
+
+  const weeks=[]; let any=false;
+  for(let w=7; w>=0; w--){
+    let d=0,p=0;
+    for(let i=0;i<7;i++){
+      const day = addDays(TODAY, -(w*7)-i);
+      if(day>TODAY) continue;
+      d += S.habits.filter(h=>isDone(h.id,day)).length; p += S.habits.length;
+    }
+    const pct = p? d/p : 0; if(pct>0) any=true;
+    weeks.push({pct:pct, lbl: w===0?"now":"-"+w});
+  }
+  $("#bars").innerHTML = weeks.map(w=>
+    '<div style="height:'+Math.max(4, w.pct*100)+'%;opacity:'+(w.pct?1:.22)+'"><span>'+w.lbl+'</span></div>').join("");
+
+  $("#goals").innerHTML = GOALS.map((g,i)=>{
+    let pct=0;
+    if(i===0) pct = Math.round((S.log["h3"]||[]).length/28*100);
+    if(i===1) pct = Math.round((S.log["h4"]||[]).length/36*100);
+    if(i===2) pct = Math.round((S.log["h2"]||[]).length/72*100);
+    if(i===3) pct = 0;
+    pct = Math.min(100,pct);
+    return '<div class="goal"><div class="gt"><b>'+g.t+'</b><span class="pct">'+pct+'%</span></div>'+
+      '<div class="bar"><i class="'+g.c+'" style="width:'+pct+'%"></i></div>'+
+      '<p class="micro" style="margin-top:.45rem">'+g.note+'</p></div>';
+  }).join("");
+}
+renderTracker();
+$("#journal").value = S.journal || "";
+
+/* ============================================================
+   render: learn + faq
+   ============================================================ */
+const TGROUPS = ["All","Basics","Face","Body","Culture"];
+$("#termFilters").innerHTML = TGROUPS.map((c,i)=>'<button class="chip'+(i===0?" on":"")+'" data-lf="'+c+'">'+c+'</button>').join("");
+let lFilter="All";
+function evClass(ev){ return ev==="Harmful"?"c" : (ev==="Supported"||ev==="Strong")?"j" : ev==="Unsupported"?"":"b"; }
+function renderTerms(){
+  const list = TERMS.filter(t=>lFilter==="All"||t.g===lFilter);
+  $("#termList").innerHTML = list.map((t,i)=>
+    '<article class="term" data-term="'+i+'"><div class="term-h"><h3>'+t.t+'</h3>'+
+    '<span class="tag '+evClass(t.ev)+'">'+t.ev+'</span><span class="car">'+I.chev+'</span></div>'+
+    '<div class="term-c"><div><div class="term-in">'+
+      '<div><div class="lbl">What people mean by it</div><p>'+t.mean+'</p></div>'+
+      '<div><div class="lbl">What holds up</div><p>'+t.real+'</p></div>'+
+    '</div></div></div></article>').join("");
+}
+renderTerms();
+$("#evidenceKey").innerHTML = EVKEY.map(e=>
+  '<div style="display:flex;gap:.8rem;align-items:flex-start"><span class="tag '+e.c+'" style="flex-shrink:0;margin-top:.1rem">'+e.t+'</span><p class="body-s">'+e.d+'</p></div>').join("");
+
+function renderFaq(q){
+  const list = FAQS.filter(f=>!q || (f.q+" "+f.a).toLowerCase().indexOf(q.toLowerCase())>-1);
+  $("#faqList").innerHTML = list.map((f,i)=>
+    '<div class="faq" data-faq="'+i+'"><button class="faq-q">'+f.q+'<span class="pm"></span></button>'+
+    '<div class="faq-a"><div><p>'+f.a+'</p></div></div></div>').join("");
+  $("#faqEmpty").classList.toggle("hidden", list.length>0);
+}
+renderFaq("");
+
+/* ============================================================
+   router
+   ============================================================ */
+const VIEWS = ["home","guides","grooming","style","community","progress","learn","faq"];
+const LABELS = {home:"Home",guides:"Guides",grooming:"Grooming",style:"Style",community:"Community",progress:"Progress",learn:"Learn",faq:"FAQ"};
+const SUBS = {home:"start here",guides:"13 reads",grooming:"routines",style:"fit & aesthetics",community:"the board",progress:"your habits",learn:"terminology",faq:"13 answers"};
+$("#sheetNav").innerHTML = VIEWS.map(v=>'<a href="#'+v+'">'+LABELS[v]+'<i>'+SUBS[v]+'</i></a>').join("");
+
+function go(v, push){
+  if(VIEWS.indexOf(v)<0) v="home";
+  $$(".view").forEach(s=>s.classList.toggle("active", s.id==="view-"+v));
+  $$("#navLinks a, #sheetNav a").forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+v));
+  closeSheet();
+  if(push && location.hash!=="#"+v) history.pushState(null,"","#"+v);
+  try{ window.scrollTo({top:0,left:0,behavior:"instant"}); }catch(err){ window.scrollTo(0,0); }
+  observeReveals();
+  if(v==="home") runCounters();
+  if(v==="progress"){ renderTracker(); }
+  document.title = "Refine";
+}
+window.addEventListener("hashchange",()=>go(location.hash.slice(1)||"home",false));
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]");
+  if(g){ e.preventDefault(); location.hash="#"+g.dataset.go; }
+});
+
+/* reveal */
+let io;
+function observeReveals(){
+  if(!("IntersectionObserver" in window)){ $$("[data-reveal]").forEach(el=>el.classList.add("in")); return; }
+  if(!io) io = new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target);} }),{threshold:.12,rootMargin:"0px 0px -40px"});
+  $$("[data-reveal]:not(.in)").forEach(el=>io.observe(el));
+}
+
+/* nav chrome */
+const nav=$("#nav");
+addEventListener("scroll",()=>nav.classList.toggle("is-stuck", scrollY>8),{passive:true});
+function closeSheet(){ $("#sheet").classList.remove("open"); $("#burger").setAttribute("aria-expanded","false"); document.body.style.overflow=""; }
+$("#burger").addEventListener("click",()=>{
+  const s=$("#sheet"); const open=!s.classList.contains("open");
+  s.classList.toggle("open",open); $("#burger").setAttribute("aria-expanded",String(open));
+  document.body.style.overflow = open?"hidden":"";
+  if(open) $$("#sheetNav a").forEach((a,i)=>a.style.animationDelay=(i*.045)+"s");
+});
+$("#sheetClose").addEventListener("click",closeSheet);
+
+/* ============================================================
+   modal
+   ============================================================ */
+function openGuide(id){
+  const g = GUIDES.find(x=>x.id===id); if(!g) return;
+  $("#modalTags").innerHTML = '<span class="tag">'+g.cat+'</span><span class="tag '+evClass(g.ev)+'">'+g.ev+'</span>';
+  $("#modalTitle").textContent = g.title;
+  $("#modalMeta").innerHTML = '<i>'+I.clock+g.time+'</i><i>'+I.gauge+g.level+'</i><i>'+I.cal+'First changes: '+g.horizon+'</i>';
+  $("#modalBody").innerHTML =
+    '<p class="lede" style="font-size:1.03rem">'+g.sum+'</p>'+
+    '<section><h4>Why this works</h4><p class="body-s">'+g.why+'</p></section>'+
+    '<section><h4>The routine</h4><ol class="steps">'+g.steps.map(s=>'<li><b>'+s.b+'</b><p>'+s.p+'</p></li>').join("")+'</ol></section>'+
+    '<section><h4>Common mistakes</h4><ul class="bullets x">'+g.miss.map(m=>'<li>'+m+'</li>').join("")+'</ul></section>'+
+    '<section><div class="note '+(g.ev==="Mixed"?"clay":"jade")+'"><b>Worth knowing.</b> '+g.note+'</div></section>'+
+    '<section style="display:flex;gap:.6rem;flex-wrap:wrap"><button class="btn btn-p btn-sm" data-go="progress">Track this</button><button class="btn btn-g btn-sm" data-go="community">Ask about it</button></section>';
+  $("#modalBg").classList.add("open"); document.body.style.overflow="hidden";
+  $("#modal").scrollTop=0; $("#modalClose").focus();
+}
+function closeModal(){ $("#modalBg").classList.remove("open"); document.body.style.overflow=""; }
+$("#modalClose").addEventListener("click",closeModal);
+$("#modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeModal(); });
+addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeModal(); closeSheet(); } });
+
+/* ============================================================
+   delegated interactions
+   ============================================================ */
+document.addEventListener("click",e=>{
+  const t=e.target;
+
+  const gc = t.closest("[data-guide]");
+  if(gc && !t.closest("[data-go]")){ openGuide(gc.dataset.guide); return; }
+
+  const gf = t.closest("[data-gf]");
+  if(gf){ gFilter=gf.dataset.gf; $$("[data-gf]").forEach(b=>b.classList.toggle("on",b===gf)); renderGuides(); return; }
+
+  const tf = t.closest("[data-tf]");
+  if(tf){ tFilter=tf.dataset.tf; $$("[data-tf]").forEach(b=>b.classList.toggle("on",b===tf)); renderThreads(); return; }
+
+  const lf = t.closest("[data-lf]");
+  if(lf){ lFilter=lf.dataset.lf; $$("[data-lf]").forEach(b=>b.classList.toggle("on",b===lf)); renderTerms(); return; }
+
+  const tab = t.closest("[data-tab]");
+  if(tab){
+    $$("#routineTabs button").forEach(b=>b.classList.toggle("on",b===tab));
+    $$(".tabpane").forEach(p=>p.classList.toggle("on", p.id==="pane-"+tab.dataset.tab));
+    return;
+  }
+
+  const vt = t.closest("[data-vote]");
+  if(vt){
+    const id=vt.dataset.vote;
+    if(!isId(id) || !allThreads().some(t=>t.id===id)) return;
+    if(S.votes[id]) delete S.votes[id]; else S.votes[id]=1;
+    save(); renderThreads(); $("#homeThreads").innerHTML=[THREADS[4],THREADS[0]].map(threadCard).join("");
+    return;
+  }
+
+  const hr = t.closest("[data-hero]");
+  if(hr){ toggle(hr.dataset.hero,TODAY); renderHero(); renderTracker(); return; }
+
+  const tk = t.closest("[data-tk]");
+  if(tk){ toggle(tk.dataset.tk, addDays(TODAY, -(6-(+tk.dataset.di)))); renderTracker(); renderHero(); return; }
+
+  const tm = t.closest(".term-h");
+  if(tm){ tm.parentElement.classList.toggle("open"); return; }
+
+  const fq = t.closest(".faq-q");
+  if(fq){
+    const box=fq.parentElement, was=box.classList.contains("open");
+    $$(".faq").forEach(f=>f.classList.remove("open"));
+    box.classList.toggle("open",!was);
+    return;
+  }
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Enter" && e.key!==" ") return;
+  const r=e.target.closest("[data-hero],[data-guide]");
+  if(r){ e.preventDefault(); r.click(); }
+});
+
+document.addEventListener("change",e=>{
+  const f=e.target.closest("[data-fit]");
+  if(f){
+    const i=+f.dataset.fit, at=S.fit.indexOf(i);
+    if(f.checked && at<0) S.fit.push(i);
+    if(!f.checked && at>-1) S.fit.splice(at,1);
+    save();
+  }
+});
+
+/* search */
+$("#guideSearch").addEventListener("input",e=>{ gQuery=e.target.value.trim(); renderGuides(); });
+$("#faqSearch").addEventListener("input",e=>renderFaq(e.target.value.trim()));
+
+/* composer */
+$("#thPost").addEventListener("click",()=>{
+  const title=$("#thTitle").value.trim().slice(0,LIM.title), body=$("#thBody").value.trim().slice(0,LIM.body);
+  if(title.length<8){ toast("Give the thread a longer title"); $("#thTitle").focus(); return; }
+  if(body.length<20){ toast("Add what you have tried so far"); $("#thBody").focus(); return; }
+  if(S.mine.length>=LIM.threads){ toast("You have reached the saved-thread limit"); return; }
+  const cat = TCATS.indexOf($("#thCat").value)>0 ? $("#thCat").value : "Skin";
+  S.mine.unshift({id:"m"+Date.now(),cat:cat,title:title,body:body,who:"you",col:"#D2A45E",time:"just now",v:1,r:0,top:null});
+  save(); $("#thTitle").value=""; $("#thBody").value="";
+  tFilter="All"; $$("[data-tf]").forEach((b,i)=>b.classList.toggle("on",i===0));
+  renderThreads(); toast("Thread posted");
+});
+
+/* habits */
+$("#addHabit").addEventListener("click",()=>{
+  const v=$("#newHabit").value.trim().slice(0,LIM.name);
+  if(v.length<3){ toast("Name the habit first"); $("#newHabit").focus(); return; }
+  if(S.habits.length>=LIM.habits){ toast("Twelve is plenty — remove one first"); return; }
+  S.habits.push({id:"u"+Date.now(),n:v,s:"Your own"});
+  save(); $("#newHabit").value=""; renderTracker(); renderHero(); toast("Habit added");
+});
+$("#newHabit").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#addHabit").click(); });
+
+let jT;
+$("#journal").addEventListener("input",e=>{
+  S.journal=String(e.target.value).slice(0,LIM.journal); clearTimeout(jT);
+  $("#noteSaved").textContent="Saving…";
+  jT=setTimeout(()=>{ save(); $("#noteSaved").textContent="Saved to this browser"; },600);
+});
+
+$("#resetData").addEventListener("click",()=>{
+  S=blank();
+  save(); renderTracker(); renderHero(); renderThreads();
+  $("#journal").value=""; $("#noteSaved").textContent="";
+  $$("[data-fit]").forEach(c=>c.checked=false);
+  toast("Tracker reset");
+});
+
+/* pointer spotlight on cards */
+document.addEventListener("pointermove",e=>{
+  const c=e.target.closest(".card-i"); if(!c) return;
+  const r=c.getBoundingClientRect();
+  c.style.setProperty("--mx",(e.clientX-r.left)+"px");
+  c.style.setProperty("--my",(e.clientY-r.top)+"px");
+},{passive:true});
+
+/* boot */
+go(location.hash.slice(1)||"home",false);
+runCounters();
+observeReveals();
+})();
+</script>
+</body>
+</html>
